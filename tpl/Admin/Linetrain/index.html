@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>线下培训</title>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+		<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/layer/skin/layer.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+		<style type="text/css">
+			a {
+				color: #337ab7;
+			}
+
+			a:hover,
+			a:active,
+			a:focus {
+				outline: none;
+				text-decoration: none;
+				color: #03A9F4;
+			}
+
+			.ulitem {
+				padding: 10px;
+				border: 1px #dcdcdc solid;
+				width: 295px;
+				float: left;
+			}
+
+			.course_img {
+				position: relative;
+			}
+
+			.course_time {
+				padding: 7px;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 9999999;
+				color: #fff;
+				position: absolute;
+				right: 0px;
+				left: 0px;
+				bottom: 0px;
+				text-align: center;
+			}
+
+			.integral_stati {
+				display: block;
+				margin: 0 auto;
+				border: 16px solid #fff;
+				width: 138px;
+				height: 138px;
+				border-radius: 50%;
+				color: #fff;
+				font-size: 1.6rem;
+				box-shadow: 0 1px 8px rgba(0, 0, 0, .2);
+				line-height: 110px;
+				overflow: hidden;
+				cursor: default;
+			}
+
+			.jifenbt {
+				cursor: pointer;
+				background-color: #46bbdf;
+				width: 205px;
+				text-align: center;
+				margin: auto;
+				color: white;
+				border-radius: 5px;
+			}
+
+			.form-control:focus {
+				border-color: #46bbdf;
+				box-shadow: none;
+			}
+
+			.fuli_name {
+				font-size: 24px;
+			}
+
+			.text-gray {
+				color: #7b7777!important;
+			}
+
+			.leibie {
+				font-size: 22px;
+				text-align: right;
+				padding-top: 0px;
+				font-weight: 600;
+			}
+
+			.course_right {
+				margin-left: 310px;
+			}
+
+			.bg_ok {
+				background-color: rgba(11, 99, 42, 0.8);
+			}
+
+			.bg_dai {
+				background-color: rgba(191, 102, 10, 0.8);
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--内容区域顶栏面包屑开始-->
+		<section class="content-header">
+			<h1 class="info_title">
+			培训班信息
+			<small>/线下培训班</small>
+		</h1>
+
+			<ol class="breadcrumb">
+				<li>
+					<a href="javascript:history.go(-1)" class="text-grey"><i class="fa fa-mail-reply-all"></i>返回</a>
+				</li>
+			</ol>
+		</section>
+		<!--内容区域顶栏面包屑结束-->
+		<section class="content">
+			<div>
+				<div class="nav-tabs-custom">
+					<ul class="nav nav-tabs">
+						<li <if condition="$typeid eq 0 ">class="active"</if>>
+							<a href="{:U('index',array('typeid'=>0))}">最新</a>
+						</li>
+						<li <if condition="$typeid eq 1 ">class="active"</if>>
+							<a href="{:U('index',array('typeid'=>1))}">最热</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active">
+							<!--所有活动开始-->
+							<div>
+								<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+									<!--内容开始-->
+									<!--筛选栏开始-->
+									<div class="row mt10">
+										<div class="col-sm-4">
+											<div class="form-group">
+												<select class="form-control select2 width_10" name="plan_category">
+													<option value="-1" <if condition="$plan_category eq '-1'">selected="selected"</if>>全部计划</option>
+													<option value="0" <if condition="$plan_category eq '0'">selected="selected"</if>>计划内</option>
+													<option value="1" <if condition="$plan_category eq '1'">selected="selected"</if>>计划外</option>
+												</select>
+											</div>
+
+										</div>
+										<div class="col-sm-4">
+											<div class="form-group">
+												<select class="form-control select2 width_10" name="training_category">
+													<option value="-1" <if condition="$training_category eq '-1'">selected="selected"</if>>全部培训类型</option>
+													<option value="0" <if condition="$training_category eq '0'">selected="selected"</if>>内部培训</option>
+													<option value="1" <if condition="$training_category eq '1'">selected="selected"</if>>外部培训</option>
+													<option value="2" <if condition="$training_category eq '2'">selected="selected"</if>>外出授课</option>
+												</select>
+											</div>
+
+										</div>
+										<form action="{:U('Admin/Linetrain/index')}" method="get">
+											<input type="hidden" name="plan_category" value="{$plan_category}" />
+											<input type="hidden" name="training_category" value="{$training_category}" />
+											<input type="hidden" name="typeid" value="{$typeid}" />
+											<div class="col-sm-4 pull-right">
+												<div class="input-group " style="width: 100%;">
+													<input type="text" name="keyword" class="form-control pull-right" placeholder="输入培训班名称、项目描述、组织人员、主办部门……">
+													<div class="input-group-btn">
+														<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+									<!--筛选栏结束-->
+									<div class="row ">
+
+										<foreach name="list" item="vo" >
+											<div class="col-sm-12 mt20">
+												<div class="box-header with-border">
+
+													<div class="ulitem">
+														<a href="{:U('Admin/Linetrain/sign_up',array(id=>$vo['id']))}">
+															<div class="course_img">
+																<img width="100%" src="{$vo['project_covers']}">
+																<div class="course_time">
+																	<spn>参与人数：{$vo['total_number']}</spn>
+																</div>
+															</div>
+														</a>
+													</div>
+													<div class="course_right">
+														<div class="fuli_name">
+															{$vo['project_name']}
+														</div>
+														<div class="mt10">
+															<if condition="$vo['plan_category'] eq 0">计划内<else />计划外</if>
+															<if condition="$vo['training_category'] eq 0">内部培训<elseif condition="$vo['training_category'] eq 1"/>外派培训<else />外出授课</if>
+														</div>
+														<div class="mt10">
+															项目时间：<span>{$vo['start_time']}  至 {$vo['end_time']}</span>
+														</div>
+														<div class="mt10">
+															<span class="text-red">{$vo['credit_total']}</span>学分 <span class="ml10 mr10 ">丨</span><span class="text-red">{$vo['online']}</span>线上课程
+															<span class="ml10 mr10 ">丨</span><span class="text-red">{$vo['face_total']}</span>面授课程
+														</div>
+														<div class="mt10">
+															<p>项目描述：</p>
+															<p class="text-gray mt5">
+																{$vo['project_description']}</p>
+														</div>
+													</div>
+												</div>
+											</div>
+										</foreach>
+									</div>
+
+									<!--内容結束-->
+									<!--分页开始-->
+									<div class="row">
+										<div class="float_r mr15">
+											<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+												{$page}
+											</div>
+										</div>
+									</div>
+									<!--分页结束-->
+								</div>
+
+							</div>
+							<!--所有活动结束-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		<script src="__PUBLIC__/Js/js/bootstrap.min.js"></script>
+		<script src="__PUBLIC__/plugins/fastclick/fastclick.js"></script>
+		<script src="__PUBLIC__/plugins/chartjs/Chart.min.js"></script>
+		<script src="__PUBLIC__/plugins/chartjs/Chart.min.js"></script>
+		<script src="__PUBLIC__/plugins/layer/layer.js"></script>
+		<script type="text/javascript">
+
+
+
+			$("select[name='plan_category']").change(function(){
+
+				var param = $(this).val();
+
+				window.location.href = "__ACTION__/plan_category/"+param;
+			});
+
+			$("select[name='training_category']").change(function(){
+
+				var param = $(this).val();
+
+				window.location.href = "__ACTION__/training_category/"+param;
+			});
+
+		</script>
+	</body>
+
+</html>

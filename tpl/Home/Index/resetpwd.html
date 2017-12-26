@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>重置密码</title>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/layer/skin/layer.css">
+		<style type="text/css">
+			.frim_line.active {
+				color: white;
+				background-color: #00acd6;
+			}
+			.action {
+				width: 400px;
+				height: 30px;
+				margin: 10px 0;
+			}
+			.imageBox {position: relative; height: 400px; width: 400px; border: 1px solid #aaa; background: #fff; overflow: hidden; background-repeat: no-repeat; cursor: move; box-shadow: 4px 4px 12px #B0B0B0;}
+			.imageBox .thumbBox {position: absolute; top: 50%; left: 50%; width: 200px; height: 200px; margin-top: -100px; margin-left: -100px; box-sizing: border-box; border: 1px solid rgb(102, 102, 102); box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5); background: none repeat scroll 0% 0% transparent;}
+			.imageBox .spinner {position: absolute; top: 0; left: 0; bottom: 0; right: 0; text-align: center; line-height: 400px; background: rgba(0, 0, 0, 0.7);}
+			.Btnsty_peyton {float: right; width: 66px; display: inline-block; margin-bottom: 10px; height: 57px; line-height: 57px; font-size: 20px; color: #FFFFFF; margin: 0px 2px; background-color: #f38e81; border-radius: 3px; text-decoration: none; cursor: pointer; box-shadow: 0px 0px 5px #B0B0B0; border: 0px #fff solid;}
+			/*选择文件上传*/
+			.new-contentarea {width: 165px; overflow: hidden; margin: 0 auto; position: relative; float: left;}
+			.new-contentarea label {width: 100%; height: 100%; display: block;}
+			.new-contentarea input[type=file] {width: 188px; height: 60px; background: #333; margin: 0 auto; position: absolute; right: 50%; margin-right: -94px; top: 0; right/*\**/: 0px\9; margin-right/*\**/: 0px\9; width/*\**/: 10px\9; opacity: 0; filter: alpha(opacity=0); z-index: 2;}
+			a.upload-img {width: 165px; display: inline-block; margin-bottom: 10px; height: 57px; line-height: 57px; font-size: 20px; color: #FFFFFF; background-color: #f38e81; border-radius: 3px; text-decoration: none; cursor: pointer; border: 0px #fff solid; box-shadow: 0px 0px 5px #B0B0B0;}
+			a.upload-img:hover {background-color: #ec7e70;}
+			.tc {text-align: center;}
+			.code{
+			    height:34px;
+			    width: 90px;
+			    line-height:34px;
+			    background: #ac9456;
+			    color: #ffffff;
+			    display: block;
+			    border-top-right-radius: 5px;
+			    border-bottom-right-radius: 5px;
+			}
+			.form-group{width:800px;}
+			#getCode span{color:#fff; }
+			#getCode:hover{text-decoration:none;  }
+		</style>
+	</head>
+	<body>
+		<!--内容区域顶栏面包屑开始-->
+		<section class="content-header">
+			<h1 class="info_title">
+		重置密码
+        <small>/密码已过有效期，请重置密码</small>
+      </h1>
+		</section>
+		<!--内容区域顶栏面包屑结束-->
+		<section class="content">
+			<div class="box box-primary">
+				<div class="box-body">
+					<div class="dataTables_wrapper dt-bootstrap">
+						<!--内容开始-->
+						<div class="row" style="width:800px;  margin:30px auto; ">
+							<form class="form-horizontal" id="info_form">
+								<div class="form-group">
+									<div class="col-sm-12">
+										<label class="col-sm-3 control-label ">账号：</label>
+										<div class="col-sm-6">
+											<input type="text" name="email" value="{$email}" class="form-control" placeholder="请输入邮箱地址" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<label class="col-sm-3 control-label ">验证码：</label>
+										<div class="col-sm-6">
+											<input type="text" name="emailcode" value="" class="form-control float_l" style="width:265px; " placeholder="请输入验证码" />
+											<a href="#" class="code text-center float_l" id="getCode" type="button" alt="0" onclick="settime()">
+												<span id="code">获取验证码</span>
+											</a>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<label class="col-sm-3 control-label ">旧密码：</label>
+										<div class="col-sm-6">
+											<input type="password" name="oldPwds" value="" class="form-control" placeholder="请输入旧密码" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<label class="col-sm-3 control-label ">新密码：</label>
+										<div class="col-sm-6">
+											<input type="password" name="passwords" value="" class="form-control" placeholder="请输入新密码，不能和近期密码相同" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<label class="col-sm-3 control-label ">确认密码：</label>
+										<div class="col-sm-6">
+											<input type="password" name="rePwd" value="" class="form-control" placeholder="请输入确认密码" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<label class="col-sm-3 control-label " style="text-align:left; "></label>
+										<div class="col-sm-6" style="color:red; font-size:11px;">
+											密码规则：须含以下任意三项：数字、大写字母、小写字母、特殊字符
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<label class="col-sm-3 control-label "> </label>
+										<div class="col-sm-6">
+				                            <a onclick="resetpwd()" class="btn btn-primary" href="#">重置密码</a>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<!--内容結束-->
+					</div>
+				</div>
+			</div>
+		</section>
+		<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		<script src="__PUBLIC__/Css/bootstrap/js/bootstrap.min.js"></script>
+		<script src="__PUBLIC__/plugins/iCheck/icheck.min.js"></script>
+		<script src="__PUBLIC__/plugins/ckeditor/ckeditor.js"></script>
+		<script src="__PUBLIC__/plugins/layer/layer.js "></script>
+		<script src="__PUBLIC__/Dist/js/jquery.mailAutoComplete-3.1.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/Js/CryptoJS/aes.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/Js/CryptoJS/pad-zeropadding.js"></script>
+		<script type="text/javascript">
+			//radio选中样式
+			$('input').iCheck({
+				labelHover: false,
+				cursor: true,
+				checkboxClass: 'icheckbox_square-blue',
+				radioClass: 'iradio_minimal-blue',
+				increaseArea: '20%'
+			});
+			
+			var myreg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+		    function settime() {
+		        var alt = $("#getCode").attr("alt");
+		        if (alt == 0) {
+		            var countdown = 60;
+		            var email = $("input[name='email']").val().trim();
+		            if (email == '' || !(myreg.test(email))) {
+		                layer.alert("邮箱有误或格式错误");
+		                return false;
+		            }else {
+		                $("#getCode").attr("alt", 1);
+		                var url = "{:U('Home/public/sendemailmessage')}";
+		                var data = {"email": email};
+		                $.ajax({
+		                    type: "post",
+		                    data: data,
+		                    url: url,
+		                    dataType: 'json',
+		                    success: function (data) {
+		                    	layer.alert(data.message);
+		                    }
+		                });
+		                runCount(countdown);
+		            }
+		        }else{
+		        	return false;
+		        }
+		    }
+
+		    function jsencrypt(data) {
+		        var encrypted = ase(data);
+		        $("input[name='keycode']").val(encrypted);
+		    }
+
+		    function resetpwd() {
+		        var email = $("input[name='email']").val().trim(); //邮箱注册
+		        var code = $("input[name='emailcode']").val().trim();
+		        var oldPwd = $("input[name='oldPwds']").val().trim();
+		        var password = $("input[name='passwords']").val().trim();
+		        var rePwd = $("input[name='rePwd']").val().trim();
+
+		        if (email == "") {
+		            layer.alert("账号不能为空");
+		            return;
+		        }
+		        if(!(myreg.test(email))) {
+		            layer.alert("邮箱有误，请重填");
+		            return;
+		        }
+		        
+		        if (code == "") {
+		            layer.alert("验证码不能为空");
+		            return;
+		        }
+		        if (oldPwd == "") {
+		            layer.alert("旧密码不能为空");
+		            return;
+		        }
+		        if (password == "") {
+		            layer.alert("新密码不能为空");
+		            return;
+		        }
+		        if (rePwd == "") {
+		            layer.alert("确认密码不能为空");
+		            return;
+		        }
+		        
+		        if (password == oldPwd) {
+		            layer.alert("新密码不能和旧密码一致");
+		            return;
+		        }
+		        
+		        if (password.length < 8 || password.length > 20) {
+		            layer.alert("密码长度应为8-20位");
+		            return;
+		        }
+		        
+		        if (password != rePwd) {
+		            layer.alert("密码和确认密码不一致");
+		            return;
+		        }
+		        
+		        var data = {"email": email, "code": code, "oldPwd": ase(oldPwd), "password": ase(password), "rePwd": ase(rePwd)};
+		        $.ajax({
+		            type: "post",
+		            data: data,
+		            url: "__CONTROLLER__/reset",
+		            dataType: "json",
+		            success: function (data) {
+		                if (data.code == 1000) {
+		                    layer.alert(data.message);
+		                    setTimeout(function () {
+								location.href = "{:U('Home/Index/index',array('typeid'=>1))}";
+		                    }, 3000);
+		                } else {
+		                    layer.alert(data.message);
+		                }
+		            }
+		        });
+		    }
+		    
+		    function ase(data){
+		        var key  = CryptoJS.enc.Latin1.parse('04eb029e72b446e7');
+		        var iv   = CryptoJS.enc.Latin1.parse('04eb029e72b446e7');
+		        var encrypted = CryptoJS.AES.encrypt(data, key, {iv:iv,mode:CryptoJS.mode.CBC,padding:CryptoJS.pad.ZeroPadding}).toString();
+		        return encrypted;
+		    }
+		    
+		    function runCount(countdown) {
+		        setTimeout(function () {
+		            if (countdown == 1) {
+		                $("#code").html("重新发送");
+		                $("#btn").attr("alt", 0);
+		            } else {
+		                countdown--;
+		                $("#code").html("重新发送(" + countdown + ")");
+		                runCount(countdown);
+		            }
+		        }, 1000)
+		    }
+		</script>
+	</body>
+
+</html>

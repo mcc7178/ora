@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>报名管理</title>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+        <link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+        <link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+        <link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+        <link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+        <link rel="stylesheet" href="__PUBLIC__/plugins/layer/skin/layer.css">
+        <link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+        <!-- daterange picker -->
+        <link rel="stylesheet" href="__PUBLIC__/plugins/daterangepicker/daterangepicker.css">
+        <!-- bootstrap datepicker -->
+        <link rel="stylesheet" href="__PUBLIC__/plugins/datepicker/datepicker3.css">
+        <!-- iCheck for checkboxes and radio inputs -->
+        <link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+        <!-- Bootstrap Color Picker -->
+        <link rel="stylesheet" href="__PUBLIC__/plugins/colorpicker/bootstrap-colorpicker.min.css">
+        <!-- Bootstrap time Picker -->
+        <link rel="stylesheet" href="__PUBLIC__/plugins/timepicker/bootstrap-timepicker.min.css">
+        <!-- Select2 -->
+        <link rel="stylesheet" href="__PUBLIC__/plugins/select2/select2.min.css">
+
+        <link rel="stylesheet" href="__PUBLIC__/Css/selectUser.css">
+        <!--三期时间插件样式-->
+
+        <link rel="stylesheet" href="__PUBLIC__/Dist/js/My97DatePicker/skin/default/datepicker.css">
+		<style type="text/css">
+			.course_map {
+				border: 1px solid #ada7a7;
+				overflow: auto;
+				max-height: 350px;
+			}
+			
+			table {
+				margin-bottom: 0px;
+			}
+
+			a {
+				color: #337ab7;
+			}
+			
+			a:hover,
+			a:active,
+			a:focus {
+				outline: none;
+				text-decoration: none;
+				color: #03A9F4;
+			}
+	
+		</style>
+        	<style type="text/css">
+		.uploadify-button{
+			text-align: center;
+			line-height: 30px;
+			width: 86px;
+			height: 30px;
+			display: block;
+			background-color: #333;
+			color: #FFFFFF!important;
+		}
+
+		.uploadify-button:hover {
+			color: #FFFFFF!important;
+			background-color: #262626;
+			border-color: #204d74;
+		}
+	</style>
+	</head>
+
+	<body>
+		<!--内容区域顶栏面包屑开始-->
+		<section class="content-header">
+			<h1 class="info_title">
+        报名管理
+        <small>/新建报名</small>
+      </h1>
+			<ol class="breadcrumb">
+				<li>
+					<a href="javascript:void(0)" onclick="javascript:history.go(-1)" ><i class="fa fa-mail-reply-all"></i>返回</a>
+				</li>
+			</ol>
+		</section>
+		<!--内容区域顶栏面包屑结束-->
+		<section class="content">
+			<div class="box">
+				<div class="box-body">
+					<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap ">
+						<div class="box-header with-border">
+							<h3 class="box-title ">新建报名</h3>
+						</div>
+						<form class="form-horizontal" method="POST" action="{:U('Admin/ActivityManage/add')}">
+							<div class="box-body">
+								<div class="box-header with-border info_box_title mb15">
+									<span>基本信息</span>
+								</div>
+								<div class=" form-group">                           
+									<label for="inputEmail3" class="col-sm-2 control-label"><span class="color_red">*</span>活动名称：</label>
+									<div class="col-sm-10">
+										<input value="{$data['activity_name']}" style="width: 300px;" name="activity_name" type="text" class="form-control mr30" id="inputEmail3" placeholder="">
+									</div>
+
+								</div>
+								
+								<div class="form-group ">
+									<label for="inputEmail3" class="col-sm-2 control-label"><span class="color_red">*</span>活动时间：</label>
+
+									<div class="col-sm-10">
+										<div class="input-group date">
+											<input value="{$data['activity_start_time']}" name="activity_start_time" type="text" id="activity_start_time" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss',isShowClear:false,readOnly:false})" class="input-sm form-control" value="">
+											<span class="input-group-addon">到</span>
+											<input value="{$data['activity_end_time']}" name="activity_end_time" type="text" id="activity_end_time" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss',isShowClear:false,readOnly:false})" class="input-sm form-control" value="">
+										</div>
+									</div>
+								</div>
+								
+								<div class=" form-group">
+									<label for="inputEmail3" class="col-sm-2 control-label"><span class="color_red">*</span>活动地址：</label>
+									<div class="col-sm-10">
+										<input value="{$data['address']}" style="width: 300px;" name="address" type="text" class="form-control mr30" id="inputEmail3" placeholder="">
+									</div>
+
+								</div>
+								<!--封面上传字段开始-->
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-2 control-label">活动封面：</label>
+								<div class="col-sm-10">
+									<input type="text" value="{$data['activity_covers']}" name="activity_covers" id="activity_covers" readonly="readonly" style="display:none;">
+									<div id="file" name="file"></div>
+									<div class="box box-success certificate_img" style="margin-top:15px; <if condition="empty($data['activity_covers'])">display:none;</if>">
+									<div class="box-tools pull-right">
+										<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+									</div>
+									<div class="box-body" id="image">
+										<img src="{$data['activity_covers']}" width="100%">
+									</div>
+								   </div>
+									<span class="ml10">(支持：gif、jpg、jpeg、bmp、png格式　建议尺寸：220px*124px)</span>
+								</div>
+							</div>
+								
+								<div class="form-group">
+									<label for="inputEmail3" class="col-sm-2 control-label"><span class="color_red">*</span>活动简介：</label>
+									<div class="col-sm-4">
+										<textarea  id="activity_description" name="activity_description" class="form-control width_10" rows="4" placeholder="请输入简介  ...">{$data['activity_description']}</textarea>
+									</div>
+								</div>
+								
+								<div class="box-header with-border info_box_title mb15">
+									<span>报名信息</span>
+								</div>
+								
+								<div class="form-group ">
+									<label for="inputEmail3" class="col-sm-2 control-label"><span class="color_red">*</span>报名时间：</label>
+
+									<div class="col-sm-10">
+										<div class="input-group date">
+											<input value="{$data['apply_start_time']}" name="apply_start_time" type="text" id="apply_start_time" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss',isShowClear:false,readOnly:false})" class="input-sm form-control" value="">
+											<span class="input-group-addon">到</span>
+											<input value="{$data['apply_end_time']}" name="apply_end_time" type="text" id="apply_end_time" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss',isShowClear:false,readOnly:false})" class="input-sm form-control" value="">
+										</div>
+									</div>
+								</div>
+								
+								<div class=" form-group">
+									<label for="inputEmail3" class="col-sm-2 control-label"><span class="color_red">*</span>人数上限：</label>
+									<div class="col-sm-10">
+										<input value="{$data['population']}" style="width: 200px;" name="population" type="text" class="form-control mr30" id="inputEmail3" placeholder="">人
+									</div>
+
+								</div>
+								
+								<div class="form-group" id="address" style="display: none;">
+								<label for="inputEmail3" class="col-sm-2 control-label">公开范围：</label>
+									<div class="col-sm-10">
+										<button class="btn btn-primary form-group_but preview" type="button" onclick="open_range()">公开范围</button></span>
+										<div class="plus-tag tagbtn clearfix "  style="margin-top: 10px" id="open">
+											<foreach name="department" item="vo" >
+												<a  value='{$vo.id}' title='{$vo.name}' href="javascript:void(0);" /><span>{$vo.name}</span><em class="open"><input type="hidden"  name="tissue_id[]" value="{$vo.id}" /></em></a>
+											</foreach>
+										</div>
+
+									</div>
+							    </div>
+								
+								<div class="form-group">
+									<label for="inputEmail3" class="col-sm-2 control-label">报名审核：</label>
+									<div class="col-sm-4">
+									<div class="mt5">
+										<span class="mr15"><input  class="mr5" type="radio" name="need_audit" id="" value="1" <if condition="$data['need_audit'] eq 1"> checked="checked" </if>/> 需审核</span>
+
+										<input class="mr5" type="radio" name="need_audit" id="" value="0"  <if condition="$data['need_audit'] eq 0"> checked="checked"  </if> /> 不需审核
+													</div>
+									</div>
+								</div>
+								<input type="hidden" value="1" name="typeid" /> 
+                                <input type="hidden" value="{$id}" name="id" /> 
+							</div>
+							<div class="box-footer">
+								<div class="form-group">
+									<div class="col-sm-12 text-center">
+                                     <button type="submit" class="btn btn-success form-group_but mr30" id="draft_save">保存</button>
+                                     <button type="submit" class="btn btn-info form-group_but" id="publish_save">保存并发布</button>
+                                	</div>
+
+								</div>
+							</div>
+
+						</form>
+						<!--内容結束-->
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!--公开范围结束-->
+		<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="__PUBLIC__/Js/js/date/jedate/jedate.js"></script>
+        <script src="__PUBLIC__/Js/js/selectUser.js"></script>
+        <script src="__PUBLIC__/Js/js/startScore.js"></script>
+        <script src="__PUBLIC__/Js/js/photo.js"></script>
+        <script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="__PUBLIC__/Js/js/js/bootstrap.min.js"></script>
+        <script src="__PUBLIC__/plugins/fastclick/fastclick.js"></script>
+        <script src="__PUBLIC__/Dist/js/app.min.js"></script>
+        <script src="__PUBLIC__/plugins/sparkline/jquery.sparkline.min.js"></script>
+        <script src="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+        <script src="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+        <script src="__PUBLIC__/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <script src="__PUBLIC__/plugins/chartjs/Chart.min.js"></script>
+        <script src="__PUBLIC__/Dist/js/pages/dashboard2.js"></script>
+        <script src="__PUBLIC__/plugins/iCheck/icheck.min.js"></script>
+        <script src="__PUBLIC__/plugins/ckeditor/ckeditor.js"></script>
+        <script src="__PUBLIC__/plugins/layer/layer.js"></script>
+        <script  src="__PUBLIC__/uploadify/jquery.Huploadify.js"></script>
+        <!--三期时间插件js-->
+        <script src="__PUBLIC__/Dist/js/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript">			
+			//radio选中样式
+			$('input').iCheck({
+				labelHover: false,
+				cursor: true,
+				checkboxClass: 'icheckbox_square-blue',
+				radioClass: 'iradio_minimal-blue',
+				increaseArea: '20%'
+			});
+			//公开范围弹窗
+			function move_org() {
+				layer.open({
+					title: '指定部门',
+					//btn: ['确定','取消'],
+					area: ['500px', '500px'],
+					type: 1,
+					skin: 'layui-layer-lan', //样式类名
+					closeBtn: 1, //显示关闭按钮
+					anim: 2,
+					shadeClose: true, //开启遮罩关闭
+					content: $("#move_org")
+				});
+			}
+           
+          //封面上传
+           $("#file").Huploadify({
+			buttonText:'上传封面',
+			auto:true,
+			method:'post',
+			fileTypeExts:'*.jpg;*.png;*.gif;*.jpeg',
+			multi:false,
+			formData:{key:123456,key2:'news'}, //banner是图片存放的目录
+			fileSizeLimit:10240,
+			itemTemplate:'',//进度条，若显示进度条用 'itemTemp'
+			showUploadedPercent:true,//是否实时显示上传的百分比，如20%
+			showUploadedSize:true,
+			removeTimeout:1000,
+			uploader: "{:U('File/upload',array('typeid'=>1))}",
+
+			onUploadSuccess: function (file, data) {
+
+				var url = JSON.parse(data);
+				var src = url.src;
+				var img_src = '__UPLOAD__/'+src;
+				$('#activity_covers').attr('value',img_src);
+				$(".certificate_img").show();
+				$("#image").html('<img width="100%" src="'+img_src+'">');
+
+			},
+		});
+
+
+
+         //公开范围
+		function open_range(){
+
+				layer.open({
+					title: '公开范围',
+					btn: ['确定','取消'],
+					yes: function (index, layero) {
+
+						var body = layer.getChildFrame('body', index);
+
+						var user_name = new Array();
+
+						var user_id = new Array();
+
+						body.find("input[type='checkbox']:checked").each(function(i){
+
+							user_name = $(this).attr("alt");
+
+							user_id = $(this).val();
+
+							OpenTips(user_name,user_id);
+						});
+
+						layer.closeAll();
+
+					},
+					area: ['700px', '450px'],
+					offset: ['20px'],
+					type: 2,
+					skin: 'layui-layer-lan', //样式类名
+					closeBtn: 1, //显示关闭按钮
+					anim: 2,
+					shadeClose: true, //开启遮罩关闭
+					content: "{:U('Jurisdiction/authority',array('typeid'=>2),'',true)}"
+				});
+
+            }
+
+
+         function checkDate(start,end,type){ //type==1为活动时间  type==2为报名时间  
+            var startTime = new Date(start);
+			var endTime = new Date(end);
+
+            
+			if(start == '' || end == ''){
+                if(type == 1){
+                  layer.msg('活动起止时间不能为空!');
+                }else{
+                  layer.msg('报名起止时间不能为空!'); 
+                }
+				
+				return false;
+			}
+			
+            
+			if(startTime.getTime() >= endTime.getTime()){
+                 if(type == 1){
+                  layer.msg('活动开始时间不能早于结束时间!');
+                }else{
+                  layer.msg('报名开始时间不能早于结束时间!');
+                }
+				
+				return false;
+			}else{
+				return true;
+			}
+		}
+        
+
+        //点击保存按钮的js判断
+		$("#draft_save").click(function(){
+
+			
+			var activity_name = $("input[name='activity_name']").val();
+			if(activity_name == ''){
+				layer.msg('活动名称不能为空!');
+				return false;
+			}
+            
+            var start1 =	$("#activity_start_time").val();
+			var end1 =	$("#activity_end_time").val();
+			if(!checkDate(start1,end1,1)){
+				return false;
+			}
+
+
+            var address = $("input[name='address']").val();
+			if(address == ''){
+				layer.msg('活动地址不能为空!');
+				return false;
+			}
+
+            var activity_description = $("#activity_description").val();
+			if(activity_description == ''){
+				layer.msg('活动简介不能为空!');
+				return false;
+			} 
+
+            var start2 =	$("#apply_start_time").val();
+			var end2 =	$("#apply_end_time").val();
+            if(!checkDate(start2,end2,2)){
+				return false;
+			}
+
+            
+			var startTime = new Date(start1);
+			var endTime = new Date(end2);
+			if(startTime < endTime){
+				layer.msg('报名结束时间不能大于活动开始时间!');
+				return false;
+			}
+            var tissue_id = $("input[name='tissue_id[]']").val();
+			if(tissue_id == undefined){
+				layer.msg('公开范围不能为空!');
+				return false;
+			}
+
+           
+			
+			$("input[name='typeid']").val(1);
+		});
+        
+
+        //点击保存并发布按钮的js判断
+		$("#publish_save").click(function(){
+			var activity_name = $("input[name='activity_name']").val();
+			if(activity_name == ''){
+				layer.msg('活动名称不能为空!');
+				return false;
+			}
+            
+            var start1 =	$("#activity_start_time").val();
+			var end1 =	$("#activity_end_time").val();
+			if(!checkDate(start1,end1,1)){
+				return false;
+			}
+
+
+            var address = $("input[name='address']").val();
+			if(address == ''){
+				layer.msg('活动地址不能为空!');
+				return false;
+			}
+
+            var activity_description = $("#activity_description").val();
+			if(activity_description == ''){
+				layer.msg('活动简介不能为空!');
+				return false;
+			} 
+
+            var start2 =	$("#apply_start_time").val();
+			var end2 =	$("#apply_end_time").val();
+            if(!checkDate(start2,end2,2)){
+				return false;
+			}
+
+            var startTime = new Date(start1);
+			var endTime = new Date(end2);
+			if(startTime < endTime){
+				layer.msg('报名结束时间不能大于活动开始时间!');
+				return false;
+			}
+			
+            var tissue_id = $("input[name='tissue_id[]']").val();
+			if(tissue_id == undefined){
+				layer.msg('公开范围不能为空!');
+				return false;
+			}
+
+           
+			$("input[name='typeid']").val(2);
+		})
+
+		</script>
+	</body>
+
+</html>

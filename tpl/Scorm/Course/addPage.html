@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="textml; charset=utf-8" />
+<meta name="author" content="RYD"/>
+<title>添加课程</title>
+<script type="text/javascript" src="__PUBLIC__/Scorm/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Scorm/plugins/layer_v3.0.3/layer.js"></script>
+<!-- bootstrap奥森图标  -->
+<link rel="stylesheet" href="__PUBLIC__/Scorm/plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Scorm/plugins/bootstrap-3.3.7/css/bootstrap-theme.min.css">
+<script src="__PUBLIC__/Scorm/plugins/bootstrap-3.3.7/js/bootstrap.min.js" ></script>
+<!-- awesome奥森图标  -->
+<link rel="stylesheet" href="__PUBLIC__/Scorm/plugins/fontawesome-v4.2/css/font-awesome.min.css">
+<style type="text/css">
+@CHARSET "UTF-8";
+*{margin:0; padding:0; font-family:"Microsoft YaHei","宋体";}
+a{text-decoration: none; }
+input,button,select,textarea{outline:none; }
+ul,ol{list-style: none; }
+img{border: 0; }
+
+.main{width:1200px; margin:30px auto; }
+.tip{color:red; margin-bottom:30px; line-height:35px; }
+</style>
+</head>
+<body>
+<div class="main">
+	<div class="tip">
+		仅支持zip课件压缩包上传，rar格式请先解压转为zip格式压缩；<br/>
+		因课件包资源比较大，请设置服务器支持上传至少150M的数据；<br/>
+	</div>
+	<form role="form" action="{:U('Home/course/addCourse')}" method="post" enctype="multipart/form-data" id="form">
+		<div class="form-group">
+			<input type="file" name="zipFile" id="zipFile"/>
+		</div>
+		<div class="form-group">
+			<label for="inputfile"></label>
+			<input type="submit" class="btn btn-success" value="提交"/>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	$("#form").submit(function(){
+		var is_file = $("#form input[type='file']").val();
+        if (is_file == '') {
+            layer.alert('请选择zip课件压缩包文件');
+            return false;
+        }
+        var pos = is_file.lastIndexOf(".");
+        var format = is_file.substring(pos + 1).toLowerCase();
+        if (format != 'zip') {
+            layer.alert('上传文件格式不正确，必须为zip');
+            return false;
+        }
+        
+        var formData = new FormData($('#form')[0]);
+     	$.ajax({
+			type: "post",
+			url: "__CONTROLLER__/addCourse",
+			data: formData,
+			dataType: "json",
+			contentType: false,
+			processData: false,
+			success: function(data){
+				if(data.code == 1000){
+					layer.alert("添加成功",function(index){
+						location.href = "__CONTROLLER__/index";
+					});
+				}else{
+					layer.alert(data.message);
+				}
+			}
+		});
+     	return false;
+	});
+</script>
+</body>
+</html>

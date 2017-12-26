@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>StreamAuthor4</title>
+<script src="jquery-1.4.2.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+	function QueryString(fieldName) {
+		var urlString = document.location.search;
+		if (urlString != null) {
+			var typeQu = fieldName + "=";
+			var urlEnd = urlString.indexOf(typeQu);
+			if (urlEnd != -1) {
+				var paramsUrl = urlString.substring(urlEnd + typeQu.length);
+				var isEnd = paramsUrl.indexOf('&');
+				if (isEnd != -1) {
+					return paramsUrl.substring(0, isEnd);
+				} else {
+					return paramsUrl;
+				}
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+	var SCOID = null;
+	var student_id = null;
+	var student_name = null;
+	var API = new Object();
+	API.LMSInitialize = function(name) {
+		if (SCOID == null) {
+			SCOID = QueryString("scoid");
+
+			student_name = QueryString("student_name");
+			student_id = QueryString("student_id") + student_name;
+		}
+		var result = "true";
+		console.log('init');
+		$.ajax({
+			type : "post",
+			contentType : "application/json",
+			async : false,
+			url : "Default.aspx/LMSInitialize",
+			dataType : "json",
+			data : "{LMSName:'" + name + "',scoid:'" + SCOID + "',student_id:'"
+					+ student_id + "',student_name:'" + student_name + "'}",
+			success : function(data) {
+				result = data.d;
+				console.log("ok:,scoid:'" + SCOID + "',student_id:'"
+						+ student_id + "',student_name:'" + student_name);
+
+			},
+			error : function(errocode) {
+				result = "false";
+				console.log("error:");
+			}
+		});
+		return result;
+	}
+	API.LMSGetValue = function(name) {
+		if (SCOID == null) {
+			SCOID = QueryString("scoid");
+			student_name = QueryString("student_name");
+			student_id = QueryString("student_id") + student_name;
+		}
+		var result = "";
+		$.ajax({
+			type : "post",
+			contentType : "application/json",
+			async : false,
+			url : "Default.aspx/LMSGetValue",
+			dataType : "json",
+			data : "{LMSName:'" + name + "',scoid:'" + SCOID + "',student_id:'"
+					+ student_id + "',student_name:'" + student_name + "'}",
+			success : function(data) {
+				result = data.d;
+
+			},
+			error : function(errocode) {
+				result = "";
+			}
+		});
+
+		return result;
+	}
+	API.LMSGetLastError = function() {
+		return 0;
+	}
+	API.LMSGetErrorString = function(errorCode) {
+		return 0;
+	}
+	API.LMSSetValue = function(name, value) {
+		if (SCOID == null) {
+			SCOID = QueryString("scoid");
+			student_name = QueryString("student_name");
+			student_id = QueryString("student_id") + student_name;
+		}
+		var result = "true";
+		$.ajax({
+			type : "post",
+			contentType : "application/json",
+			async : false,
+			url : "Default.aspx/LMSSetValue",
+			dataType : "json",
+			data : "{LMSName:'" + name + "',LMSValue:'" + value + "',scoid:'"
+					+ SCOID + "',student_id:'" + student_id
+					+ "',student_name:'" + student_name + "'}",
+			success : function(data) {
+				result = data.d;
+			},
+			error : function(errocode) {
+				result = "false";
+			}
+		});
+
+		return result;
+	}
+	API.LMSCommit = function(name) {
+		if (SCOID == null) {
+			SCOID = QueryString("scoid");
+			student_name = QueryString("student_name");
+			student_id = QueryString("student_id") + student_name;
+		}
+		var result = "true";
+		$.ajax({
+			type : "post",
+			contentType : "application/json",
+			async : false,
+			url : "Default.aspx/LMSCommit",
+			dataType : "json",
+			data : "{LMSName:'" + name + "',scoid:'" + SCOID + "',student_id:'"
+					+ student_id + "',student_name:'" + student_name + "'}",
+			success : function(data) {
+				result = data.d;
+				console.log('aa');
+				// 如果是第三方公司的，调用接口，传数据
+				if (student_name == "100" || student_name == "101") {
+					console.log('1001a');
+					var state = '';
+					var time = '';
+					var score = '';
+					$.get('/KeJian.ashx?action=GetKeJianMsg&scoId=' + SCOID
+							+ '&userid=' + student_id, function(resre) {
+						//[{"allScore":"90","allState":"2","allTime":"777"}]
+						console.log(resre);
+						var info = resre.split(",");
+						time = info[2].split(':')[1].replace('"', '').replace(
+								'"', '').replace('}]', '')
+						score = info[0].split(':')[1].replace('"', '').replace(
+								'"', '');
+						state = info[1].split(':')[1].replace('"', '').replace(
+								'"', '');
+						if (student_name == "100") {
+							$.get(
+									'http://tls.fabayaya.com/-/api.html?do=play_record&rid='
+											+ QueryString("rid") + '&userid='
+											+ QueryString("student_id")
+											+ '&stat=' + state + '&times='
+											+ time + '&score=' + score,
+									function(resre) {
+										console.log(resre);
+									});
+						}
+
+						if (student_name == "101") {
+							$.get(
+									'http://tls2.fabayaya.com/-/api.html?do=play_record&rid='
+											+ QueryString("rid") + '&userid='
+											+ QueryString("student_id")
+											+ '&stat=' + state + '&times='
+											+ time + '&score=' + score,
+									function(resre) {
+										console.log(resre);
+									});
+						}
+
+					});
+
+				}
+			},
+			error : function(errocode) {
+				result = "false";
+			}
+		});
+
+		return result;
+
+	}
+	API.LMSGetDiagnostic = function(errorCode) {
+		return "";
+	}
+
+	API.LMSFinish = function(name) {
+		if (SCOID == null) {
+			SCOID = QueryString("scoid");
+			student_name = QueryString("student_name");
+			student_id = QueryString("student_id") + student_name;
+		}
+		var result = "true";
+		$.ajax({
+			type : "post",
+			contentType : "application/json",
+			async : false,
+			url : "Default.aspx/LMSFinish",
+			dataType : "json",
+			data : "{LMSName:'" + name + "',scoid:'" + SCOID + "',student_id:'"
+					+ student_id + "',student_name:'" + student_name + "'}",
+			success : function(data) {
+				result = data.d;
+				console.log('bb');
+				// 如果是第三方公司的，调用接口，传数据
+				if (student_name == "100" || student_name == "101") {
+					console.log('1001b');
+					var state = '';
+					var time = '';
+					var score = '';
+					$.get('/KeJian.ashx?action=GetKeJianMsg&scoId=' + SCOID
+							+ '&userid=' + student_id, function(resre) {
+						//[{"allScore":"90","allState":"2","allTime":"777"}]
+						console.log(resre);
+						var info = resre.split(",");
+						time = info[2].split(':')[1].replace('"', '').replace(
+								'"', '').replace('}]', '')
+						score = info[0].split(':')[1].replace('"', '').replace(
+								'"', '');
+						state = info[1].split(':')[1].replace('"', '').replace(
+								'"', '');
+						if (student_name == "100") {
+							$.get(
+									'http://tls.fabayaya.com/-/api.html?do=play_record&rid='
+											+ QueryString("rid") + '&userid='
+											+ QueryString("student_id")
+											+ '&stat=' + state + '&times='
+											+ time + '&score=' + score,
+									function(resre) {
+										console.log(resre);
+									});
+						}
+
+						if (student_name == "101") {
+							$.get(
+									'http://tls2.fabayaya.com/-/api.html?do=play_record&rid='
+											+ QueryString("rid") + '&userid='
+											+ QueryString("student_id")
+											+ '&stat=' + state + '&times='
+											+ time + '&score=' + score,
+									function(resre) {
+										console.log(resre);
+									});
+						}
+
+					});
+
+				}
+			},
+			error : function(errocode) {
+				result = "false";
+			}
+		});
+
+		return result;
+	}
+</script>
+</head>
+<frameset id="stage" name="stage">
+	<frame id="scoStartPage" name="scoStartPage" runat="server" src="main.htm">
+	</frame>
+</frameset>
+</html>
+

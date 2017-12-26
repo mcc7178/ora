@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<if condition="$v eq 'wap'">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta  name="applicable-device"  content="mobile">
+</if>
+<title>课件播放</title>
+<style type="text/css">
+@CHARSET "UTF-8";
+*{margin:0; padding:0; color:#5E5E5E; font-family:"Microsoft YaHei","宋体";}
+a{text-decoration: none; }
+input,button,select,textarea{outline:none; }
+ul,ol{list-style: none; }
+img{border: 0; }
+#stage{background:#000; }
+<if condition="$v eq 'wap'">
+body{
+	transform:rotate(90deg);
+	-webkit-transform:rotate(90deg);
+	-moz-transform:rotate(90deg);
+}
+</if>
+</style>
+<script type="text/javascript" src="__PUBLIC__/Scorm/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+	var SCOID = {$scoid};
+	var scoid = {$scoid};
+	var student_id = {$student_id};
+	var student_name = '{$student_name}';
+	student_name = encodeURIComponent(student_name);
+	var comid = {$comid};
+	var entry = {$entry};
+	var outid = "{$outid}";
+	var API = new Object();
+	API.LMSInitialize = function(name) {
+		var result = "true";
+		$.ajax({
+			type : "post",
+			url : "__CONTROLLER__/LMSInitialize",
+			dataType : "json",
+			data : "LMSName="+name+"&scoid="+scoid+"&student_id="+student_id+"&student_name="+student_name+"&outid="+outid+"&comid="+comid+"&entry="+entry,
+			success : function(data) {
+				result = data.d;
+			},
+			error : function(errocode) {
+				result = "false";
+			}
+		});
+		return result;
+	}
+	
+	//这里是一个大坑，不能采用异步请求的方式，数据初始化反应慢
+	API.LMSGetValue = function(name){
+		if(name == "cmi.core.lesson_status"){
+			return "{$study.lesson_status}"
+    	}
+		if(name == "cmi.core.lesson_location"){
+			return "{$study.lesson_location}";
+		}
+    	if(name == "cmi.core.session_time"){
+    		return "{$study.session_time}";
+    	}
+    	if(name == "cmi.core.exit"){
+    		return "{$study.core_exit}";
+    	}
+    	if(name == "cmi.core.lesson_mode"){
+    		return "{$study.lesson_mode}";
+    	}
+    	if(name == "cmi.core.student_id"){
+    		return "{$study.student_id}";
+    	}
+    	if (name == "cmi.core.student_name"){
+    		return "{$study.student_name}";
+    	}
+    	if (name == "cmi.core.credit"){
+    		return "{$study.credit}";
+    	}
+    	if (name == "cmi.core.entry"){
+    		return "{$study.entry}";
+    	}
+    	if (name == "cmi.core.score"){
+    		return "{$study.score}";
+    	}
+    	if (name == "cmi.core.score.raw"){
+    		return "{$study.score}";
+    	}
+    	if (name == "cmi.core.total_time"){
+    		return "{$study.total_time}";
+    	}
+    	if (name == "cmi.suspend_data"){
+    		return "{$study.suspend_data}";
+    	}
+	}
+	
+	API.LMSGetLastError = function() {
+		return 0;
+	}
+	
+	API.LMSGetErrorString = function(errorCode) {
+		return 0;
+	}
+	
+	API.LMSSetValue = function(name, value) {
+		value = encodeURIComponent(value);
+		var result = "true";
+		$.ajax({
+			type : "post",
+			url : "__CONTROLLER__/LMSSetValue",
+			dataType : "json",
+			data : "LMSName="+name+"&LMSValue="+value+"&scoid="+scoid+"&student_id="+student_id+"&student_name="+student_name+"&outid="+outid+"&comid="+comid+"&entry="+entry,
+			success : function(data) {
+				result = data.d;
+			},
+			error : function(errocode) {
+				result = "false";
+			}
+		});
+
+		return result;
+	}
+	
+	API.LMSCommit = function(name){
+		var result = "true";
+		/* $.ajax({
+			type : "post",
+			url : "__CONTROLLER__/LMSCommit",
+			dataType : "json",
+			data : "LMSName="+name+"&scoid="+scoid+"&student_id="+student_id+"&student_name="+student_name+"&outid="+outid+"&comid="+comid+"&entry="+entry,
+			success : function(data){
+				result = data.d;
+			},
+			error : function(errocode) {
+				result = "false";
+			}
+		}); */
+		return result;
+	}
+	
+	API.LMSGetDiagnostic = function(errorCode) {
+		return "";
+	}
+
+	API.LMSFinish = function(name) {
+		var result = "true";
+		/* $.ajax({
+			type : "post",
+			url : "__CONTROLLER__/LMSFinish",
+			dataType : "json",
+			data : "LMSName="+name+"&scoid="+scoid+"&student_id="+student_id+"&student_name="+student_name+"&outid="+outid+"&comid="+comid+"&entry="+entry,
+			success : function(data) {
+				result = data.d;
+			},
+			error : function(errocode) {
+				result = "false";
+			}
+		}); */
+		return result;
+	}
+	
+	
+</script>
+</head>
+<if condition="$code eq 1000">
+	<frameset id="stage" name="stage">
+		<frame id="scoStartPage" name="scoStartPage" runat="server" frameborder="0" scrolling="no" src="__UPLOAD__/Scorm/{$scoPath}"></frame>
+	</frameset>
+<else/>
+	<body style="background:#212121; ">
+		<h1 style="width:100%; text-align:center; color:#BBBBBB; margin-top:250px; ">{$message}</h1>
+	</body>
+</if>
+</html>

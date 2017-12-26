@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>用户登录日志</title>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+		<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/layer/skin/layer.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+		<!--三期时间插件样式-->
+		<link rel="stylesheet" href="__PUBLIC__/Dist/js/My97DatePicker/skin/default/datepicker.css">
+	</head>
+	<body>
+
+		<!--内容区域顶栏面包屑开始-->
+		<section class="content-header">
+			<h1 class="info_title">
+				用户登录日志
+				<small>/日志列表</small>
+			</h1>
+		</section>
+		<!--内容区域顶栏面包屑结束-->
+		<section class="content">
+
+			<div class="nav-tabs-custom ml10 mr10 mt10 mb10">
+				<!--筛选栏开始-->
+				<div class="row ">
+
+					<form action="{:U('Log/index')}" method="get" class="form-horizontal">
+
+						<div class="col-sm-3">
+							<div class="input-group date">
+								<input name="start_time" type="text" id="StartTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss',isShowClear:false,readOnly:false})" class="form-control" value="{$start_time}">
+								<span class="input-group-addon">至</span>
+								<input name="end_time" type="text" id="EndTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss',isShowClear:false,readOnly:false})" class=" form-control" value="{$end_time}">
+							</div>
+						</div>
+
+						<div class="col-sm-3">
+							<div class="input-group ">
+								<input type="text" name="keywords" class="form-control pull-right" placeholder="输入用户账号/终端地址……" value="{$keywords}">
+								<div class="input-group-btn">
+									<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-3">
+							<div  class="dataTables_filter">
+								<a class="btn btn-info mr10 float_r" href="{:U('exportLog')}">导出日志</a>
+							</div>
+						</div>
+					</form>
+
+
+				</div>
+
+				<!--筛选栏结束-->
+
+				<div class="box-body ">
+					<div class="dataTables_wrapper form-inline dt-bootstrap ">
+
+						<!--内容开始-->
+						<div class="row ">
+							<div class="col-sm-12 ">
+								<table id="example1 " class="table table-bordered table-striped dataTable passed_table " role="grid " aria-describedby="example1_info ">
+									<thead>
+											<th class="sorting text-center ">用户账号</th>
+											<th class="sorting text-center ">用户名称</th>
+											<th class="sorting text-center ">所属部门</th>
+											<th class="sorting text-center ">终端地址</th>
+											<th class="sorting text-center ">操作类型</th>
+											<th class="sorting text-center ">操作时间</th>
+											<th class="sorting text-center ">操作内容</th>
+											<th class="sorting text-center ">所属模块</th>
+											<th class="sorting text-center ">日志类型</th>
+										</tr>
+									</thead>
+									<tbody id="tab ">
+										<foreach name="list" item="vo" >
+											<tr role="row " class="odd text-center ">
+												<td>{$vo['email']}</td>
+												<td>{$vo['username']}</td>
+												<td>{$vo['tissue_name']}</td>
+												<td>{$vo['login_ip']}</td>
+												<td>
+													<if condition="$vo['login_typeid'] eq 2">
+														新增
+													<elseif condition="$vo['login_typeid'] eq 3"/>
+														编辑
+													<elseif condition="$vo['login_typeid'] eq 4"/>
+														删除
+													</if>
+													<if condition="$vo['login_classid'] eq 0">
+														<if condition="$vo['login_typeid'] eq 1">
+															登录
+															<else />
+															登出
+														</if>
+														<elseif condition="$vo['login_classid'] eq 1"/>
+														课程
+														<elseif condition="$vo['login_classid'] eq 2"/>
+														试卷
+														<elseif condition="$vo['login_classid'] eq 3"/>
+														讲师
+														<elseif condition="$vo['login_classid'] eq 4"/>
+														供应商
+														<elseif condition="$vo['login_classid'] eq 5"/>
+														课件
+														<elseif condition="$vo['login_classid'] eq 6"/>
+														资讯
+														<elseif condition="$vo['login_classid'] eq 7"/>
+														配置方案
+														<elseif condition="$vo['login_classid'] eq 8"/>
+														培训班
+														<elseif condition="$vo['login_classid'] eq 9"/>
+														调研
+														<elseif condition="$vo['login_classid'] eq 10"/>
+														考试
+														<elseif condition="$vo['login_classid'] eq 11"/>
+														问卷
+														<elseif condition="$vo['login_classid'] eq 12"/>
+														活动报名
+														<else />
+														审核规则
+													</if>
+												</td>
+												<td>{$vo['login_time']}</td>
+												<td>{$vo['login_msg']}</td>
+												<td>
+													<if condition="$vo['login_classid'] eq 0">
+													用户登录
+													<elseif condition="$vo['login_classid'] eq 1"/>
+													资源管理
+													<elseif condition="$vo['login_classid'] eq 2"/>
+													资源管理
+													<elseif condition="$vo['login_classid'] eq 3"/>
+													资源管理
+													<elseif condition="$vo['login_classid'] eq 4"/>
+													资源管理
+													<elseif condition="$vo['login_classid'] eq 5"/>
+													资源管理
+													<elseif condition="$vo['login_classid'] eq 6"/>
+													资讯管理
+													<elseif condition="$vo['login_classid'] eq 7"/>
+													系统管理
+													<elseif condition="$vo['login_classid'] eq 8"/>
+													培训班管理
+													<elseif condition="$vo['login_classid'] eq 9"/>
+													工具管理
+													<elseif condition="$vo['login_classid'] eq 10"/>
+													工具管理
+													<elseif condition="$vo['login_classid'] eq 11"/>
+													工具管理
+													<elseif condition="$vo['login_classid'] eq 12"/>
+													工具管理
+													<else />
+													审核中心
+													</if>
+												</td>
+												<td>
+													<if condition="$vo['login_typeid'] eq 0">
+														系统登录
+														<elseif condition="$vo['login_typeid'] eq 1"/>
+														系统登录
+														<elseif condition="$vo['login_typeid'] eq 2"/>
+														新增操作
+														<elseif condition="$vo['login_typeid'] eq 3"/>
+														编辑操作
+														<else />
+														删除操作
+													</if>
+												</td>
+											</tr>
+										</foreach>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!--内容結束-->
+						<div class="row">
+							<div class="float_r mr15">
+								<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+									{$pages}
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+		</section>
+		<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		<script src="__PUBLIC__/Js/js/bootstrap.min.js"></script>
+		<script src="__PUBLIC__/plugins/fastclick/fastclick.js"></script>
+		<script src="__PUBLIC__/plugins/chartjs/Chart.min.js"></script>
+		<script src="__PUBLIC__/plugins/chartjs/Chart.min.js"></script>
+		<script src="__PUBLIC__/plugins/layer/layer.js"></script>
+		<script src="__PUBLIC__/plugins/iCheck/icheck.min.js"></script>
+		<!--三期时间插件js-->
+		<script src="__PUBLIC__/Dist/js/My97DatePicker/WdatePicker.js"></script>
+
+		<script type="text/javascript ">
+			//radio选中样式
+			$('input').iCheck({
+				labelHover: false,
+				cursor: true,
+				checkboxClass: 'icheckbox_square-blue',
+				radioClass: 'iradio_minimal-blue',
+				increaseArea: '20%'
+			});
+
+			function del_click() {
+				//删除分组
+				layer.confirm('您确定要删除吗？', {
+					btn: ['确定', '取消'],
+					skin: 'layui-layer-lan'
+						//按钮
+				}, function() {
+					layer.msg('删除成功', {
+						icon: 1
+					});
+				}, function() {
+					layer.msg('取消删除', {
+						time: 2000, //2s后自动关闭
+					});
+				});
+			}
+
+			//全选
+			var $checkboxAll = $(".passed_allcheck "),
+				$checkbox = $(".passed_table ").find("[type='checkbox' ] ").not("[disabled] "),
+				length = $checkbox.length,
+				i = 0;
+
+			$checkboxAll.on("ifClicked ", function(event) {
+				if(event.target.checked) {
+					$checkbox.iCheck('uncheck');
+					i = 0;
+				} else {
+					$checkbox.iCheck('check');
+					i = length;
+				}
+			});
+		</script>
+	</body>
+
+</html>

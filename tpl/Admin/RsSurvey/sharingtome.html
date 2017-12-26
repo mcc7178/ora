@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>资源管理_问卷列表</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/layer/skin/layer.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+<style>
+	#categorys {
+		display: none;
+		width:300px; 
+		margin:10px 20px;
+	}
+	.operate a:hover{color:#f79a0b !important; }
+</style>
+</head>
+<body>
+<!--内容区域顶栏面包屑开始-->
+<section class="content-header">
+	<h1 class="info_title">
+			           问卷管理
+			<small>/问卷列表</small>
+	</h1>
+</section>
+<!--内容区域顶栏面包屑结束-->
+<section class="content">
+	<div>
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs">
+				<li>
+					<a href="__CONTROLLER__/listPage?type=1">已发布</a>
+				</li>
+				<li>
+					<a href="__CONTROLLER__/listPage?type=2">未发布</a>
+				</li>
+				<li>
+					<a href="__CONTROLLER__/listPage?type=3">待审核</a>
+				</li>
+				<li>
+					<a href="__CONTROLLER__/listPage?type=4">已拒绝</a>
+				</li>
+
+				<li class="active">
+					<a href="{:U('RsSurvey/sharingtome')}">共享给我的</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="good_audit">
+					<!--课程列表开始-->
+					<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+						<!--筛选栏开始-->
+						<div class="row">
+							<form action="__SELF__" method="get">
+								<input type="hidden" name="type" value="{$type}"/>
+								<div class="col-sm-2">
+									<div class="form-group">
+										<div class="input-group width_10">
+											<input type="text" name="keyword" class="form-control pull-right" value="{$keyword}" placeholder="搜索问卷名">
+											<div class="input-group-btn">
+												<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<!--筛选栏结束-->
+						<!--内容开始-->
+						<div class="row">
+							<div class="col-sm-12">
+								<table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+									<thead>
+										<tr role="row">
+											<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">问卷名称</th>
+											<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">问卷分类</th>
+											<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">使用统计</th>
+											<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">上传人</th>
+											<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">上传时间</th>
+											<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">操作</th>
+										</tr>
+									</thead>
+									<tbody id="tab" class="passed_table">
+										<foreach name="list" item="items">
+											<tr role="row" class="odd text-center">
+												<td>{$items['survey_name']}</td>
+												<td>{$items['cat_name']}</td>
+												<td>{$items['use_num']}</td>
+												<td>{$items['username']}</td>
+												<td>{$items['survey_upload_time']}</td>
+												<td class="operate">
+													<a href="{:U('detail',array('id'=>$items['id']))}" class="bs-callout-info color_blue mr5">
+														<i class="fa fa-eye" ></i>查看
+													</a>
+												</td>
+											</tr>
+										</foreach>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!--内容結束-->
+						<!--分页开始-->
+						<div class="row">
+							<div class="float_r mr15">
+								<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+									{$page}
+								</div>
+							</div>
+						</div>
+						<!--分页结束-->
+					</div>
+					<!--问卷列表结束-->
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="__PUBLIC__/Css/bootstrap/js/bootstrap.min.js"></script>
+<script src="__PUBLIC__/plugins/layer/layer.js"></script>
+<script type="text/javascript">
+	//问卷共享
+	$(".share").click(function() {
+		var id = $(this).attr('data-id');//问卷id
+		layer.open({
+			title: '共享问卷',
+			btn: ['确定', '取消'],
+			skin: 'layui-layer-lan', //样式类名
+			closeBtn: 1, //显示关闭按钮
+			anim: 2,
+			shadeClose: true, //开启遮罩关闭
+			type: 2,
+			area: ['700px', '520px'],
+			content: "{:U('Sys/sharerange',array('type'=>7,'source_id'=>"+id+"))}",
+			yes:function(index, layero){
+				var body = layer.getChildFrame('body',index);
+				var tissue_ids = new Array();
+				body.find("input:checked").each(function(i){
+					tissue_ids += $(this).val();
+					tissue_ids += ",";
+				});
+
+				$.ajax({
+					type:"POST",
+		            url:"{:U('QuestionBank/share')}",
+		            data:{"tissue_ids":tissue_ids,"ids":id,'type':7},
+		            success: function(data){
+		            	if(data.status==0){
+		            		layer.msg(data.info,{time:2000});
+		            		return false;
+		            	}else{
+		            		layer.msg(data.info,{time:2000},function(){
+		            			window.location.reload();
+		            		});
+		            	}
+		            }
+				});
+			}
+		});
+	})
+</script>

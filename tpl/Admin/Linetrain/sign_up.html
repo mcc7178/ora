@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>查看线下培训</title>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+		<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/layer/skin/layer.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+		<style type="text/css">
+			a {
+				color: #337ab7;
+			}
+			
+			a:hover,
+			a:active,
+			a:focus {
+				outline: none;
+				text-decoration: none;
+				color: #03A9F4;
+			}
+			
+			.ulitem {
+				padding: 10px;
+				border: 1px #dcdcdc solid;
+				width: 295px;
+				float: left;
+			}
+			
+			.course_img {
+				position: relative;
+			}
+			
+			.course_time {
+				padding: 7px;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 9999999;
+				color: #fff;
+				position: absolute;
+				right: 0px;
+				left: 0px;
+				bottom: 0px;
+				text-align: center;
+			}
+			
+			.integral_stati {
+				display: block;
+				margin: 0 auto;
+				border: 16px solid #fff;
+				width: 138px;
+				height: 138px;
+				border-radius: 50%;
+				color: #fff;
+				font-size: 1.6rem;
+				box-shadow: 0 1px 8px rgba(0, 0, 0, .2);
+				line-height: 110px;
+				overflow: hidden;
+				cursor: default;
+			}
+			
+			.jifenbt {
+				cursor: pointer;
+				background-color: #46bbdf;
+				width: 205px;
+				text-align: center;
+				margin: auto;
+				color: white;
+				border-radius: 5px;
+			}
+			
+			.form-control:focus {
+				border-color: #46bbdf;
+				box-shadow: none;
+			}
+			
+			.fuli_name {
+				font-size: 24px;
+			}
+			
+			.text-gray {
+				color: #7b7777!important;
+			}
+			
+			.leibie {
+				font-size: 22px;
+				text-align: right;
+				padding-top: 0px;
+				font-weight: 600;
+			}
+			
+			.course_right {
+				margin-left: 310px;
+			}
+			
+			.bg_ok {
+				background-color: rgba(11, 99, 42, 0.8);
+			}
+			
+			.bg_dai {
+				background-color: rgba(191, 102, 10, 0.8);
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--内容区域顶栏面包屑开始-->
+		<section class="content-header">
+			<h1 class="info_title">
+				线下培训班
+			<small>/培训班报名</small>
+		</h1>
+
+			<ol class="breadcrumb">
+				<li>
+					<a href="javascript:history.go(-1)" class="text-grey"><i class="fa fa-mail-reply-all"></i>返回</a>
+				</li>
+			</ol>
+		</section>
+		<!--内容区域顶栏面包屑结束-->
+		<section class="content">
+			<div>
+
+				<div class="dataTables_wrapper form-inline dt-bootstrap">
+					<!--内容开始-->
+					<div class="row ">
+						<div class="col-sm-12 mt15">
+							<div class="box-header with-border">
+
+								<div class="ulitem">
+										<div class="course_img">
+											<img width="100%" src="{$project_data['project_covers']}">
+											<div class="course_time">
+												<spnn>参与人数：<span class="population_total">{$project_data['population_total']}</span></spnn>
+											</div>
+										</div>
+								</div>
+								<div class="course_right">
+									<div class="fuli_name">
+										{$project_data['project_name']}
+										<span class="pull-right">
+											<if condition="!empty($state['id'])"><button class="btn btn-info form-group_but" id="sign_up">立即报名</button><else /><button class="btn btn-default form-group_but">报名成功</button></if>
+											<if condition="$project_data['population'] neq 99999999"><span style="font-size: 14px;">（人数限制 <span class="text-blue" id="population_total">{$project_data['population_total']}</span>/<if condition="empty($project_data['population'])">0<else />{$project_data['population']}</if>）</span></if>
+										</span>
+									</div>
+									<div class="mt10">
+										<span class="label label-info "><if condition="$project_data['plan_category'] eq 0">计划内<else />计划外</if></span>
+										<span class="label label-info "><if condition="$project_data['training_category'] eq 0">内部培训<elseif condition="$project_data['training_category'] eq 1"/>外派培训<else />外出授课</if></span>
+									</div>
+									<div class="mt10">
+										报名时间：<span>{$project_data['start_time']}  至 {$project_data['end_time']}</span>
+									</div>
+									<div class="mt10">
+										<span class="text-red">{$project_data['credit_total']}</span>学分 <span class="ml10 mr10 ">丨</span><span class="text-red">{$project_data['online']}</span>线上课程
+										<span class="ml10 mr10 ">丨</span><span class="text-red">{$project_data['face_total']}</span>面授课程
+									</div>
+									<div class="mt10">
+										<p>活动简介：</p>
+										<p class="text-gray mt5">
+											{$project_data['project_description']} </p>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-12 mt15">
+						<div class="nav-tabs-custom">
+							<ul class="nav nav-tabs">
+								<li class="active">
+									<a href="#sure_fabu" data-toggle="tab">课程</a>
+								</li>
+								<li>
+									<a href="#none_fabu" data-toggle="tab">考试</a>
+								</li>
+
+								<li>
+									<a href="#daishenhe" data-toggle="tab">调研</a>
+								</li>
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane active" id="sure_fabu">
+									<!--课程开始-->
+									<div>
+										<div class="dataTables_wrapper form-inline dt-bootstrap">
+											<!--内容开始-->
+											<div class="row">
+												<div class="col-sm-12">
+													<table class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+														<thead>
+															<tr role="row">
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">课程名称</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">授课方式</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">讲师</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">开始时间</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">结束时间</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">学分</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">地址</th>
+
+															</tr>
+														</thead>
+														<tbody>
+															<foreach name="course_data" item="vo" >
+																	<tr role="row" class="odd text-center">
+																		<td><if condition="!empty($state['id'])">{$vo['course_name']}<else /><a href="{:U('admin/my_course/detail',array('project_id'=>$vo['project_id'],'course_id'=>$vo['course_id']))}">{$vo['course_name']}</a></if></td>
+																		<td><if condition="$vo['course_way'] eq 0">在线<else />面授</if></td>
+																		<td><if condition="!empty($vo['name'])">{$vo['name']}<else />{$vo['lecturer_name']}</if></td>
+																		<td>{$vo['start_time']}</td>
+																		<td>{$vo['end_time']}</td>
+																		<td>{$vo['credit']}</td>
+																		<td>{$vo['location']}</td>
+
+																	</tr>
+															</foreach>
+														</tbody>
+													</table>
+
+												</div>
+											</div>
+											<!--内容結束-->
+										</div>
+
+									</div>
+									<!--课程结束-->
+								</div>
+
+								<div class="tab-pane " id="none_fabu">
+									<!--考试列表开始-->
+									<div>
+
+										<div class="dataTables_wrapper form-inline dt-bootstrap">
+											<!--内容开始-->
+											<div class="row">
+												<div class="col-sm-12">
+													<table class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+														<thead>
+															<tr role="row">
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">考试名称</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">考试方式</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">开始时间</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">结束时间</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">考试时长（分钟）</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">考试次数</th>
+																<if condition="empty($state['id'])">
+																	<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">考试状态</th>
+																	<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">操作</th>
+																</if>
+															</tr>
+														</thead>
+														<tbody>
+															<foreach name="examination_data" item="vo" >
+																<tr role="row" class="odd text-center">
+																	<td><if condition="!empty($vo['test_names'])">{$vo['test_names']}<else />{$vo['test_name']}</if></td>
+																	<td><if condition="$vo['cacheid'] eq 0">线上<else />线下</if></td>
+																	<td>{$vo['start_time']}</td>
+																	<td>{$vo['end_time']}</td>
+																	<td>{$vo['test_length']}</td>
+																	<td>{$vo['freq']}</td>
+																	<if condition="empty($state['id'])">
+																		<if condition="$vo['statusinfo'] eq '未开始'">
+																			<td>
+																				未开始
+																			</td>
+																			<elseif condition="$vo['statusinfo'] eq '进行中'" />
+																			<td>
+																				进行中
+																			</td>
+																			<td>
+																				<if condition="$vo['test_id'] neq 0">
+																					<a href="{:U('admin/my_exam/joinExam',array('examination_id'=>$vo['test_id'],'project_id'=>$vo['project_id']))}" class="bs-callout-info"><i class="fa fa-object-group  mr5" aria-hidden="true"></i>参加考试</a>
+																					<else/>
+																					<a href="{:U('admin/my_exam/lookResultOffline',array('examination_id'=>$vo['test_id'],'project_id'=>$vo['project_id']))}" class="bs-callout-info  mr20"><i class="fa fa-eye  mr5" aria-hidden="true"></i>查看</a>
+																				</if>
+																			</td>
+																			<else/>
+																			<td>已结束</td>
+																			<td>
+																				<if condition="$vo['test_id'] neq 0">
+																					<!-- <a href="{:U('getProjectExamInfo',array('project_id'=>$vo['project_id'],'examination_id'=>$vo['test_id']))}" class="bs-callout-info  mr20">
+																					<i class="fa fa-eye  mr5" aria-hidden="true"></i>查看
+																					</a> -->
+																					<a href="{:U('admin/my_exam/result',array('pid'=>$vo['project_id'],'eid'=>$vo['test_id']))}" class="bs-callout-info  mr20">
+																						<i class="fa fa-eye  mr5" aria-hidden="true"></i>查看
+																					</a>
+																					<else/>
+																					<a href="{:U('admin/my_exam/lookResultOffline',array('examination_id'=>$vo['test_id'],'project_id'=>$vo['project_id']))}" class="bs-callout-info  mr20"><i class="fa fa-eye  mr5" aria-hidden="true"></i>查看</a>
+																				</if>
+																				<!-- <a href="{:U('admin/my_exam/delExam',array('project_id'=>$vo['project_id'],'test_id'=>$vo['test_id']))}" name="delete" del-pid="{$vo['project_id']}" del-tid="{$vo['test_id']}" class="color_or">
+																					<i class="fa  fa-trash " aria-hidden="true"></i>删除
+																				</a> -->
+																			</td>
+																		</if>
+																	</if>
+																</tr>
+															</foreach>
+														</tbody>
+													</table>
+
+												</div>
+											</div>
+											<!--内容結束-->
+										</div>
+
+									</div>
+									<!--考试列表结束-->
+								</div>
+								<div class="tab-pane " id="daishenhe">
+									<!--调研开始-->
+									<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+										<!--内容开始-->
+										<div class="row">
+											<div class="col-sm-12">
+												<table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+													<thead>
+														<tr role="row">
+															<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">调研名称</th>
+															<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">开始时间</th>
+															<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">结束时间</th>
+															<if condition="empty($state['id'])">
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">调研状态</th>
+																<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">操作</th>
+															</if>
+														</tr>
+													</thead>
+													<tbody id="tab">
+														<foreach name="survey_data" item="vo" >
+															<tr role="row" class="odd text-center">
+																<td><if condition="!empty($vo['survey_names'])">{$vo['survey_names']}<else />{$vo['survey_name']}</if></td>
+																<td>{$vo['start_time']}</td>
+																<td>{$vo['end_time']}</td>
+																<if condition="empty($state['id'])">
+																	<if condition="$vo['status'] eq 0">
+																		<if condition="strtotime($vo['start_time']) lt time() AND strtotime($vo['end_time']) gt time()">
+																			<td>进行中</td>
+																			<td>
+																				<a href="{:U('admin/my_survey/joinSurvey',array('survey_id'=>$vo['survey_id'],'project_id'=>$vo['project_id']))}" class="mr20">
+																					<i class="fa fa-thumb-tack mr5" aria-hidden="true"></i>参加调研
+																				</a>
+																			</td>
+																			<elseif condition="strtotime($vo['start_time']) gt time()"/>
+																			<td>即将开始</td>
+																			<td>----</td>
+																			<else/>
+																			<td>已逾期</td>
+																			<td>
+																				<a href="{:U('admin/my_survey/checkSurveyResult',array('project_id'=>$vo['project_id'],'survey_id'=>$vo['survey_id']))}" class="bs-callout-info  mr20">
+																					<i class="fa fa-eye  mr5" aria-hidden="true"></i>查看
+																				</a>
+																			</td>
+																		</if>
+																		<else/>
+																		<td><if condition="$vo['status'] eq 3">已逾期<else />已参加</if></td>
+																		<td>
+																			<a href="{:U('admin/my_survey/checkSurveyResult',array('project_id'=>$vo['project_id'],'survey_id'=>$vo['survey_id']))}" class="bs-callout-info  mr20">
+																				<i class="fa fa-eye  mr5" aria-hidden="true"></i>查看
+																			</a>
+																		</td>
+																	</if>
+																</if>
+															</tr>
+														</foreach>
+													</tbody>
+												</table>
+
+											</div>
+										</div>
+										<!--内容結束-->
+									</div>
+
+									<!--调研结束-->
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+
+					<!--内容結束-->
+				</div>
+
+			</div>
+		</section>
+		<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		<script src="__PUBLIC__/Js/js/bootstrap.min.js"></script>
+		<script src="__PUBLIC__/plugins/fastclick/fastclick.js"></script>
+		<script src="__PUBLIC__/plugins/chartjs/Chart.min.js"></script>
+		<script src="__PUBLIC__/plugins/chartjs/Chart.min.js"></script>
+		<script src="__PUBLIC__/plugins/layer/layer.js"></script>
+		<script type="text/javascript">
+
+			$("#sign_up").click(function(){
+
+				$.ajax({
+					type: "POST",
+					url: "{:U('Admin/Linetrain/form_sign')}",
+					data: "id={$project_data['id']}",
+					success: function(msg){
+						if(msg == 200){
+							$("#sign_up").attr("class","btn btn-default form-group_but");
+
+							$("#sign_up").html("报名成功");
+
+							var population_total = $(".population_total").html();
+
+							var num = Number(population_total) + 1;
+
+							$(".population_total").html(num);
+
+							$("#population_total").html(num);
+
+							layer.msg('报名成功', {
+								time: 1500,
+								icon: 1
+							});
+
+							window.location.reload();
+
+						} else if(msg == 401){
+							layer.msg('已报名成功');
+						} else if(msg == 402){
+
+							layer.msg('该报名已结束');
+
+						}else{
+							layer.msg('该报名人数已满');
+						}
+					}
+				})
+
+			});
+
+		</script>
+	</body>
+
+</html>

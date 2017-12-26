@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>报名列表</title>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+ 		<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+  		<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+  		<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+ 		<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+  		<link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+  		<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+  		<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/layer/skin/layer.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/Mycourse.css">
+		<style type="text/css">
+			a {
+				color: #337ab7;
+			}
+			
+			a:hover,
+			a:active,
+			a:focus {
+				outline: none;
+				text-decoration: none;
+				color: #03A9F4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--内容区域顶栏面包屑开始-->
+		<section class="content-header">
+			<h1 class="info_title">
+			活动报名管理
+			<small>/活动列表</small>
+		</h1>
+
+			<ol class="breadcrumb">
+				<li>
+					<a class="text-grey"><i class="fa fa-mail-reply-all"></i>返回</a>
+				</li>
+			</ol>
+		</section>
+		<!--内容区域顶栏面包屑结束-->
+		<section class="content">
+			<div>
+				<div class="nav-tabs-custom">
+					<ul class="nav nav-tabs">
+						<li <if condition="$type eq 0"> class="active"</if>><a href="__ACTION__/type/0" >已发布</a></li>
+						<li <if condition="$type eq 1"> class="active" </if>><a href="__ACTION__/type/1" >未发布</a></li>
+                        <li <if condition="$type eq 2"> class="active" </if>><a href="__ACTION__/type/2" >待审核</a></li>
+						<li <if condition="$type eq 3"> class="active" </if>><a href="__ACTION__/type/3" >审核未通过</a></li>
+						<li <if condition="$type eq 4"> class="active" </if>><a href="__ACTION__/type/4" >报名截止</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane <if condition='$type eq 0'>active</if>" id="sure_fabu">
+							<!--已发布开始-->
+							<div>
+								<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+									<!--筛选栏开始-->
+									<div class="row mb10">
+										<div class="col-sm-4">
+
+                                            <form method="GET" action="{:U('Admin/ActivityManage/index',array('type'=>0))}">
+											<div class="input-group " style="width: 80%;">
+												<input type="text" name="table_search" value="{$keyword0}" class="form-control pull-right" placeholder="输入活动名称……">
+												<div class="input-group-btn">
+													<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+												</div>
+											</div>
+                                            </form>
+
+										</div>
+										<div class="col-sm-8">
+											<div id="example1_filter" class="dataTables_filter">
+												<a href="{:U('Admin/ActivityManage/add',array())}" type="button" class="btn btn-info  float_r"> <i class="fa fa-plus mr5 " aria-hidden="true "></i>新建报名</a>
+											</div>
+										</div>
+									</div>
+									<!--筛选栏结束-->
+									<!--内容开始-->
+									<div class="row">
+										<div class="col-sm-12">
+											<table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+												<thead>
+													<tr role="row">
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">活动名称</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">人数上限</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">报名需审核</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">报名人数</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">报名通过</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">操作</th>
+
+													</tr>
+												</thead>
+												<tbody id="tab">
+
+                                                  <foreach name="data0" item="v" key="k">
+													<tr role="row" class="odd text-center">
+														<td>{$v['activity_name']}</td>
+														<td>{$v['population']}</td>
+														<td>
+															<if condition="$v['need_audit'] eq 1">
+														    	需审核
+															<else/>
+                                                               	不需审核
+															</if>
+														</td>
+														<td>{$v['apply_count']}</td>
+														<td>
+															<if condition="$v['need_audit'] eq 1">
+														    	{$v['apply_pass_count']}
+															<else/>
+                                                               	{$v['apply_count']}
+															</if>
+														</td>
+														<td>
+
+															<a href="{:U('Admin/ActivityManage/show',array('id'=>$v['id'],'type'=>0))}" class="text-blue mr20"><i class="fa fa-search mr5" aria-hidden="true"></i>查看</a>
+															<a onclick="quxiaoFB({$v['id']},'{$v.activity_name}');" href="#" class="bs-callout-info color_or"><i class="fa fa-trash-o mr5" aria-hidden="true"></i>取消发布 </a>
+														</td>
+													</tr>
+                                                  </foreach>   
+
+												</tbody>
+											</table>
+
+										</div>
+									</div>
+									<!--内容結束-->
+									<!--分页开始-->
+									<div class="row">
+										<div class="float_r mr15">
+											<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+												<ul class="pagination">
+													{$page0}
+												</ul>
+											</div>
+										</div>
+									</div>
+									<!--分页结束-->
+								</div>
+
+							</div>
+							<!--已发布结束-->
+						</div>
+
+						<div class="tab-pane <if condition='$type eq 1'>active</if>" id="none_fabu">
+							<!--未发布列表开始-->
+							<div>
+
+								<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+									<!--筛选栏开始-->
+									<div class="row mb10">
+										<div class="col-sm-4">
+											<form method="GET" action="{:U('Admin/ActivityManage/index',array('type'=>1))}">
+											<div class="input-group " style="width: 80%;">
+												<input type="text" name="table_search"  value="{$keyword1}" class="form-control pull-right" placeholder="输入活动名称……">
+												<div class="input-group-btn">
+													<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+												</div>
+											</div>
+											</form>
+										</div>
+
+										<div class="col-sm-8">
+											<div id="example1_filter" class="dataTables_filter">
+												<a href="{:U('Admin/ActivityManage/add',array())}" type="button" class="btn btn-info  float_r"> <i class="fa fa-plus mr5 " aria-hidden="true "></i>新建报名</a>
+												<button type="button" class="btn btn-danger mr20 float_r" onclick="shanchu(1);"> <i class="fa fa-trash mr5" aria-hidden="true"></i>删除所选</button>
+											</div>
+										</div>
+									</div>
+									<!--筛选栏结束-->
+									<!--内容开始-->
+									<div class="row">
+										<div class="col-sm-12">
+											<table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+												<thead>
+													<tr role="row">
+														<th class="sorting_asc text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" width="45">
+															<label style="margin-bottom: 0px;">
+																<input type="checkbox" class="audit_allcheck">
+															</label>
+														</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">活动名称</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">人数上限</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">报名需审核</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">操作</th>
+													</tr>
+												</thead>
+												<tbody id="tab" class="audit_table">
+
+                                                    <foreach name="data1" item="v" key="k">
+													<tr role="row" class="odd text-center">
+														<td>
+															<input type="checkbox" name="checkbox1[]" value="{$v.id}">
+														</td>
+														<td>{$v['activity_name']}</td>
+														<td>{$v['population']}</td>
+														<td>
+															<if condition="$v['need_audit'] eq 1">
+														    	需审核
+															<else/>
+                                                               不需审核
+															</if>
+														</td>
+														<td>
+															<a href="{:U('Admin/ActivityManage/edit',array('id'=>$v['id']))}" class="bs-callout-info mr20"><i class="fa fa-pencil mr5" aria-hidden="true"></i>编辑 </a>
+															<a href="{:U('Admin/ActivityManage/publish',array('id'=>$v['id']))}" class="text-success mr20"><i class="fa fa-paper-plane-o mr5" aria-hidden="true"></i>发布报名</a>
+															<a onclick="one_shanchu({$v.id});" href="#" class="bs-callout-info color_or"><i class="fa fa-trash-o mr5" aria-hidden="true"></i>删除 </a>
+														</td>
+													</tr>
+                                                    </foreach>
+
+												</tbody>
+											</table>
+
+										</div>
+									</div>
+									<!--内容結束-->
+									<!--分页开始-->
+									<div class="row">
+										<div class="float_r mr15">
+											<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+												<ul class="pagination">
+													{$page1}
+												</ul>
+											</div>
+										</div>
+									</div>
+									<!--分页结束-->
+
+								</div>
+
+							</div>
+							<!--未发布列表结束-->
+						</div>
+						<div class="tab-pane <if condition='$type eq 2'>active</if>" id="daishenhe">
+							<!--待审核开始-->
+							<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+								<!--筛选栏开始-->
+								<div class="row mb10">
+									<form method="GET" action="{:U('Admin/ActivityManage/index',array('type'=>2))}">
+									<div class="col-sm-4">
+										<div class="input-group " style="width: 80%;">
+											<input type="text" name="table_search" class="form-control pull-right"  value="{$keyword2}" placeholder="输入活动名称……">
+											<div class="input-group-btn">
+												<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+											</div>
+										</div>
+									</div>
+									</form>
+									<div class="col-sm-8">
+										<div id="example1_filter" class="dataTables_filter">
+											<a href="{:U('Admin/ActivityManage/add',array())}" type="button" class="btn btn-info  float_r"> <i class="fa fa-plus mr5 " aria-hidden="true "></i>新建报名</a>
+										</div>
+									</div>
+								</div>
+								<!--筛选栏结束-->
+								<!--内容开始-->
+								<div class="row">
+									<div class="col-sm-12">
+										<table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+											<thead>
+												<tr role="row">
+													<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">工号</th>
+													<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">活动名称</th>
+													<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">人数上限</th>
+													<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">报名需审核</th>
+													<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">等待审核</th>
+
+												</tr>
+											</thead>
+											<tbody id="tab">
+
+                                                <foreach name="data2" item="v" key="k">
+												<tr role="row" class="odd text-center">
+													<td>{$v['orderno']}</td>
+													<td>{$v['activity_name']}</td>
+													<td>{$v['population']}</td>
+													<td>
+														<if condition="$v['need_audit'] eq 1">
+														    	需审核
+															<else/>
+                                                               不需审核
+															</if>
+													</td>
+													<td>张少华</td>
+												</tr>
+                                                </foreach>
+
+											</tbody>
+										</table>
+
+									</div>
+								</div>
+								<!--内容結束-->
+								<!--分页开始-->
+								<div class="row">
+									<div class="float_r mr15">
+										<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+											<ul class="pagination">
+												{$page2}
+											</ul>
+										</div>
+									</div>
+								</div>
+								<!--分页结束-->
+							</div>
+							<!--待审核结束-->
+						</div>
+
+						<div class="tab-pane <if condition='$type eq 3'>active</if>" id="weitongguo">
+							<!--审核未通过开始-->
+							<div>
+								<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+									<!--筛选栏开始-->
+									<div class="row mb10">
+										<div class="col-sm-4">
+											<form method="GET" action="{:U('Admin/ActivityManage/index',array('type'=>3))}">
+											<div class="input-group " style="width: 80%;">
+												<input type="text" name="table_search"  value="{$keyword3}" class="form-control pull-right" placeholder="输入活动名称……">
+												<div class="input-group-btn">
+													<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+												</div>
+											</div>
+											</form>
+										</div>
+
+										<div class="col-sm-8">
+											<div id="example1_filter" class="dataTables_filter">
+												<a href="{:U('Admin/ActivityManage/add',array())}" type="button" class="btn btn-info  float_r"> <i class="fa fa-plus mr5 " aria-hidden="true "></i>新建报名</a>
+												<button type="button" class="btn btn-danger mr20 float_r" onclick="shanchu(3);"> <i class="fa fa-trash mr5" aria-hidden="true"></i>删除全部记录</button>
+											</div>
+										</div>
+									</div>
+									<!--筛选栏结束-->
+									<!--内容开始-->
+									<div class="row">
+										<div class="col-sm-12">
+											<table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+												<thead>
+													<tr role="row">
+														<th class="sorting_asc text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" width="45">
+															<label style="margin-bottom: 0px;">
+																<input type="checkbox" class="wei_allcheck">
+															</label>
+														</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">工号</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">原因</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">活动名称</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">人数上限</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">报名需审核</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">终审人员</th>
+													</tr>
+												</thead>
+												<tbody id="tab" class="wei_table">
+
+													 <foreach name="data3" item="v" key="k">
+													<tr role="row" class="odd text-center">
+														<td>
+															<input type="checkbox" name="checkbox3[]" value="{$v.id}">
+														</td>
+														<td>{$v['orderno']}</td>
+														<td>
+															<a href="javascript:void(0)" onclick="show('{$v.objection}')" class="text-blue">查看</a>
+														</td>
+														<td>{$v['activity_name']}</td>
+														<td>{$v['population']}</td>
+														<td>
+															<if condition="$v['need_audit'] eq 1">
+														    	需审核
+															<else/>
+                                                               不需审核
+															</if>
+														</td>
+														<td>李长生</td>
+                                                          
+													</tr>
+													 </foreach>
+
+
+												</tbody>
+											</table>
+
+										</div>
+									</div>
+									<!--内容結束-->
+									<!--分页开始-->
+									<div class="row">
+										<div class="float_r mr15">
+											<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+												<ul class="pagination">
+												{$page3}
+												</ul>
+											</div>
+										</div>
+									</div>
+									<!--分页结束-->
+
+								</div>
+
+							</div>
+							<!--审核未通过结束-->
+						</div>
+
+						<div class="tab-pane <if condition='$type eq 4'>active</if>" id="jeizhi">
+							<!--报名截止开始-->
+							<div>
+								<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+									<!--筛选栏开始-->
+									<div class="row mb10">
+										<div class="col-sm-4">
+											<form method="GET" action="{:U('Admin/ActivityManage/index',array('type'=>4))}">
+											<div class="input-group " style="width: 80%;">
+												<input type="text" name="table_search"  value="{$keyword4}" class="form-control pull-right" placeholder="输入活动名称……">
+												<div class="input-group-btn">
+													<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+												</div>
+											</div>
+											</form>
+										</div>
+
+										<div class="col-sm-8">
+											<div id="example1_filter" class="dataTables_filter">
+												<a href="{:U('Admin/ActivityManage/add',array())}" type="button" class="btn btn-info  float_r"> <i class="fa fa-plus mr5 " aria-hidden="true "></i>新建报名</a>
+												<button type="button" class="btn btn-danger mr20 float_r" onclick="shanchu(4);"> <i class="fa fa-trash mr5" aria-hidden="true"></i>删除所选</button>
+											</div>
+										</div>
+									</div>
+									<!--筛选栏结束-->
+									<!--内容开始-->
+									<div class="row">
+										<div class="col-sm-12">
+											<table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+												<thead>
+													<tr role="row">
+														<th class="sorting_asc text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" width="45">
+															<label style="margin-bottom: 0px;">
+																<input type="checkbox" class="jie_allcheck">
+															</label>
+														</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">活动名称</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">人数上限</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">报名需审核</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">报名人数</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">报名通过</th>
+														<th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">操作</th>
+													</tr>
+												</thead>
+												<tbody id="tab" class="jie_table">
+
+													<foreach name="data4" item="v" key="k">
+													<tr role="row" class="odd text-center">
+														<td>
+															<input type="checkbox" name="checkbox4[]" value="{$v.id}">
+														</td>
+														<td>{$v['activity_name']}</td>
+														<td> {$v['population']} </td>
+														<td>
+															<if condition="$v['need_audit'] eq 1">
+														    	需审核
+															<else/>
+                                                               不需审核
+															</if>
+														</td>
+														<td>{$v['apply_count']}</td>
+														<td>{$v['apply_pass_count']}</td>
+														<td>
+															<a onclick="one_shanchu({$v.id});" href="#" class="bs-callout-info color_or"><i class="fa fa-trash-o mr5" aria-hidden="true"></i>删除 </a>
+														</td>
+
+													</tr>
+													</foreach>
+
+												</tbody>
+											</table>
+
+										</div>
+									</div>
+									<!--内容結束-->
+									<!--分页开始-->
+									<div class="row">
+										<div class="float_r mr15">
+											<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+												<ul class="pagination">
+													{$page4}
+												</ul>
+											</div>
+										</div>
+									</div>
+									<!--分页结束-->
+
+								</div>
+
+							</div>
+							<!--报名截止结束-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		 <script src="__PUBLIC__/Js/js/submit.js"></script>
+		 <script src="__PUBLIC__/Js/js/js/bootstrap.min.js"></script>
+		 <script src="__PUBLIC__/plugins/fastclick/fastclick.js"></script>
+		 <script src="__PUBLIC__/Dist/js/app.min.js"></script>
+		 <script src="__PUBLIC__/plugins/sparkline/jquery.sparkline.min.js"></script>
+		 <script src="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+		 <script src="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+		 <script src="__PUBLIC__/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+		 <script src="__PUBLIC__/plugins/chartjs/Chart.min.js"></script>
+		 <script src="__PUBLIC__/Dist/js/pages/dashboard2.js"></script>
+		 <script src="__PUBLIC__/plugins/iCheck/icheck.min.js"></script>
+		 <script src="__PUBLIC__/plugins/ckeditor/ckeditor.js"></script>
+		 <script src="__PUBLIC__/Dist/js/demo.js"></script>
+		 <script src="__PUBLIC__/Js/js/date/jedate/jedate.js"></script>
+		 <script src="__PUBLIC__/plugins/layer/layer.js"></script>
+		<script type="text/javascript">
+			//radio选中样式
+			$('input').iCheck({
+				labelHover: false,
+				cursor: true,
+				checkboxClass: 'icheckbox_square-blue',
+				radioClass: 'iradio_minimal-blue',
+				increaseArea: '20%'
+			});
+
+			//未发布全选checkbox
+			var $checkboxAllb = $(".audit_allcheck"),
+				$checkboxb = $(".audit_table").find("[type='checkbox']").not("[disabled]"),
+				length = $checkboxb.length,
+				i = 0;
+
+			$checkboxAllb.on("ifClicked", function(event) {
+				if(event.target.checked) {
+					$checkboxb.iCheck('uncheck');
+					i = 0;
+				} else {
+					$checkboxb.iCheck('check');
+					i = length;
+				}
+			});
+
+			//审核未通过全选checkbox
+			var $checkboxAlla = $(".wei_allcheck"),
+				$checkboxa = $(".wei_table").find("[type='checkbox']").not("[disabled]"),
+				length = $checkboxa.length,
+				i = 0;
+
+			$checkboxAlla.on("ifClicked", function(event) {
+				if(event.target.checked) {
+					$checkboxa.iCheck('uncheck');
+					i = 0;
+				} else {
+					$checkboxa.iCheck('check');
+					i = length;
+				}
+			});
+
+			//截止报名全选checkbox
+			var $checkboxAllc = $(".jie_allcheck"),
+				$checkboxc = $(".jie_table").find("[type='checkbox']").not("[disabled]"),
+				length = $checkboxc.length,
+				i = 0;
+
+			$checkboxAllc.on("ifClicked", function(event) {
+				if(event.target.checked) {
+					$checkboxc.iCheck('uncheck');
+					i = 0;
+				} else {
+					$checkboxc.iCheck('check');
+					i = length;
+				}
+			});
+
+			//取消发布
+			function quxiaoFB(id,name) {
+				layer.confirm('确认取消发布 '+name+' 吗？</br>取消后报名内的所有报名信息都将无效', {
+					btn: ['确定', '取消'],
+					skin: 'layui-layer-lan'
+						//按钮
+				}, function() {
+					var ids  = new Array();
+					ids.push(id);					   
+				
+					$.post("{:U('Admin/ActivityManage/batchdelete')}",{"ids":ids}, function(data) {  
+						
+						if(data.status == 1){  
+							layer.msg('取消发布成功',{time: 1000,icon: 1});//bootstrap框架确认弹窗
+							setTimeout(function(){
+								location.reload();
+							},500);   
+							
+						}else{  
+							layer.msg(data.info, { time: 1000});
+						}     
+					},'json');
+				});
+			}
+
+			//未发布删除所选
+			function shanchu(type) {
+				layer.confirm('确认删除所选数据吗？', {
+					btn: ['确定', '取消'],
+					skin: 'layui-layer-lan'
+						//按钮
+				}, function() {
+                        
+						if(type == 1){
+                          var lists=document.getElementsByName('checkbox1[]');
+						}else if(type == 3){
+                          var lists=document.getElementsByName('checkbox3[]');
+						}else if(type == 4){
+                          var lists=document.getElementsByName('checkbox4[]');
+						}
+						
+						var ids  = new Array();
+
+						for (var i = 0,ress=0; i < lists.length; i++) {
+							if(lists[i].checked){
+							ress=ress+1;
+							ids.push(lists[i].value);					   
+							}
+						} 
+
+                       if(ress>=1){
+							$.post("{:U('Admin/ActivityManage/batchdelete')}",{"ids":ids}, function(data) {  
+								
+								if(data.status == 1){  
+									layer.msg(data.info,{time: 1000,icon: 1});//bootstrap框架确认弹窗
+									
+									setTimeout(function(){
+									// location.href = data.url; 
+									 location.reload();
+									},1000);   
+									
+								}else{  
+									layer.msg(data.info, { time: 1000});
+									//    location.href = data.url; 
+								}     
+							},'json');
+						}else{
+						layer.msg('请勾选一条数据', {time: 1000}); 
+						}
+
+				});
+			}
+
+
+           //未发布单个删除
+			function one_shanchu(id) {
+				layer.confirm('确认删除所选数据吗？', {
+					btn: ['确定', '取消'],
+					skin: 'layui-layer-lan'
+						//按钮
+				}, function() {
+						var ids  = new Array();
+						ids.push(id);					   
+					
+						$.post("{:U('Admin/ActivityManage/batchdelete')}",{"ids":ids}, function(data) {  
+							
+							if(data.status == 1){  
+								layer.msg(data.info,{time: 1000,icon: 1});//bootstrap框架确认弹窗
+								setTimeout(function(){
+									location.reload();
+								},500);   
+								
+							}else{  
+								layer.msg(data.info, { time: 1000});
+							}     
+						},'json');
+				});
+			}
+
+            //查看拒绝原因
+            function show(objection){
+                layer.open({
+					title: '拒绝理由',
+					btn: ['确认'],
+					area: ['280px', '160px'],
+					//					offset: ['20px'],
+					type: 1,
+					skin: 'layui-layer-lan', //样式类名
+					closeBtn: 1, //显示关闭按钮
+					anim: 2,
+					shadeClose: true, //开启遮罩关闭
+					content: "<div>" + objection + "</div>",
+
+
+					});
+			}
+			function audit_click() {
+				layer.confirm('确定通过对 XXXX 等 12 条审批？', {
+					btn: ['确定', '取消'],
+					skin: 'layui-layer-lan'
+						//按钮
+				}, function() {
+					layer.msg('确认通过审批成功', {
+						time: 1500,
+						icon: 1
+					});
+				});
+			}
+
+		</script>
+	</body>
+
+</html>

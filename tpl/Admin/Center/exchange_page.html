@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>学分统计-学分兑换</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/layer/skin/layer.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+<style type="text/css">
+a {
+	color: #337ab7;
+}
+
+a:hover,a:active,a:focus {
+	outline: none;
+	text-decoration: none;
+	color: #03A9F4;
+}
+.page_con_1{font-weight:700; }
+.input_text{width:150px; padding:0 8px; border:1px solid #CCCCCC; border-radius:3px; height:32px; light-height:32px; font-size:15px; }
+.input_text:focus{border:1px solid #66AFE9;}
+.page_con_1{height:35px; line-height:35px; }
+</style>
+</head>
+<body>
+	<section class="content">
+		<div class="col-sm-12">
+			<div class="col-sm-4 page_con_1">年度总学分：{$total_credits}</div>
+			<div class="col-sm-4 page_con_1">可兑换学分：{$valid_credits}</div>
+			<div class="col-sm-4 page_con_1">当前兑换率：{$exc_rule}</div>
+		</div>
+		<div class="col-sm-12" role="form">
+			<div class="col-sm-6 page_con_1 mt15">输入学分：
+				<input type="text" class="input_text" placeholder="请输入学分"><span class="ml20">可兑换：0</span>
+			</div>
+			<div class="col-sm-4 page_con_1 mt15"><button type="button" class="btn btn-success btn-sm yesExchange">确认兑换</button></div>
+		</div>
+		<div class="col-sm-12 mt15">
+			<table class="table table-condensed">
+				<thead>
+					<tr style="background:#ddd; " >
+						<th>兑换时间</th>
+						<th>消费学分</th>
+						<th>兑换率</th>
+						<th>兑换积分</th>
+					</tr>
+				</thead>
+				<tbody>
+					<foreach name="record" item="list">
+						<tr>
+							<td>{$list.update_time}</td>
+							<td>{$list.credits}</td>
+							<td>{$list.exc_rule}</td>
+							<td>{$list.exc_integral}</td>
+						</tr>
+					</foreach>
+				</tbody>
+			</table>
+		</div>
+		<!--内容結束-->
+		<!--分页开始-->
+		<div class=col-sm-12>
+			<div class="float_r mr15">
+				<div class="dataTables_paginate paging_simple_numbers">
+					{$pageNav}
+				</div>
+			</div>
+		</div>
+		<!--分页结束-->
+
+	</section>
+	<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="__PUBLIC__/Css/bootstrap/js/bootstrap.min.js"></script>
+	<script src="__PUBLIC__/plugins/iCheck/icheck.min.js"></script>
+	<!--时间插件js-->
+	<script src="__PUBLIC__/plugins/layer/layer.js"></script>
+	<script type="text/javascript">
+		$(".input_text").keyup(function(){
+			var excVal = $(this).val();//要兑换的学分
+			excVal = Number(excVal);
+			var exc_rule = "{$exc_rule}";//兑换规则
+			exc_rule = Number(exc_rule);
+			
+			var valid_credits = "{$valid_credits}";
+			valid_credits = Number(valid_credits);
+			
+			if(excVal > valid_credits){
+				layer.msg("可兑换学分不足", {time:800});
+				return false;
+			}
+			
+			var result = excVal * exc_rule;//兑换结果
+			if(isNaN(result)){
+				result = 0;
+			}
+			$(this).siblings("span").text("可兑换："+result);
+		});
+		
+		$(".yesExchange").click(function(){
+			var excVal = $(".input_text").val();
+			excVal = Number(excVal);
+			var exc_rule = "{$exc_rule}";
+			
+			var valid_credits = "{$valid_credits}";
+			valid_credits = Number(valid_credits);
+			
+			if(excVal > valid_credits){
+				layer.msg("可兑换学分不足", {time:800});
+				return false;
+			}
+			
+			$.ajax({
+				type: "post",
+				url: "__CONTROLLER__/exchange",
+				data: "excVal="+excVal+"&excRule="+exc_rule,
+				dataType: "json",
+				success: function(data){
+					if(data.code == 1000){
+						layer.msg("兑换成功", {time:800}, function(){
+							location.href = "__CONTROLLER__/exchangePage";
+						});
+					}else{
+						layer.msg(data.message, {time:800});
+					}
+				}
+			});
+		});
+	</script>
+</body>
+</html>

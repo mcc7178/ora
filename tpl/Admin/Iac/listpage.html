@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>中保协-导入数据</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+<style type="text/css">
+	.txtc{text-align:center; }
+	table{width:100%; }
+	tr{width:100%; height:40px; border-bottom:1px dashed #ccc; }
+	tr td{text-align:center; }
+	tr td a{color:#1f82c5; }
+	tr td a:hover{text-decoration:underline; cursor:pointer; }
+	tr.title{background:#ddd; }
+	tr.title th{text-align:center;}
+	#iacImportBox {
+            display: none;
+            width: 300px;
+            margin: 10px 20px;
+        }
+	#iacSetBox {
+            display: none;
+            width: 300px;
+            margin: 10px 20px;
+        }
+</style>
+</head>
+<body>
+
+	<!--内容区域顶栏面包屑开始-->
+	<section class="content-header">
+		<h1 class="info_title">
+			中保协数据管理 <small>/导入数据</small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="javascript:void(0)" onclick="JavaScript:history.back(-1)" class="text-grey"><i class="fa fa-mail-reply-all"></i>返回</a></li>
+		</ol>
+	</section>
+	<!--内容区域顶栏面包屑结束-->
+	<section class="content">
+		<div class="box">
+			<div class="box-body">
+				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+					<!--筛选栏开始-->
+					<div class="row mb10 mt10">
+						<form action="">
+							<div class="col-sm-12">
+								<div class="input-group">
+									<select class="form-control select2 width_10" name="year">
+										<option value="">请选择年份</option>
+										<foreach name="yearList" item="ydata">
+										<option value="{$ydata}" <if condition="$ydata eq $year"> selected </if> >{$ydata}</option>
+										</foreach>
+									</select>
+								</div>
+								<div class="input-group ">
+									<div class="input-group-btn">
+										<button type="submit" class="btn btn-default">
+											<i class="fa fa-search"></i>
+										</button>
+									</div>
+								</div>
+								<div class="float_r input-group ">
+									<a type="button" class="btn btn-success ml10" onclick="iac_import();"><i class="fa fa-upload mr5"></i>导入数据</a>
+									<a class="ml10" href="/Upload/excelTmp/iac_tmp.xlsx" download="">查看导入模板</a>
+								</div>
+								<div class="float_r input-group mr30 iacStatusSet">
+									<a type="button" class="btn btn-success ml10" onclick="iac_set();"><i class="fa fa-cog mr5"></i>设置</a>
+								</div>
+							</div>
+						</form>
+					</div>
+					<!--筛选栏结束-->
+					<!--内容开始-->
+					<div class="row">
+						<div class="col-sm-12">
+							<table>
+								<thead>
+								<tr class="title">
+									<th style="width:8%;" >序号</th>
+									<th style="width:40%;">导入文件</th>
+									<th style="width:20%;">导入时间</th>
+									<th style="width:10%;">状态</th>
+									<th style="width:10%;">上传人</th>
+									<th style="width:10%;">操作</th>
+								</tr>
+								</thead>
+								<tbody>
+								<foreach name="list" item="data" key="key">
+								<tr>
+									<td>{$key+1}</td>
+									<td>{$data.file_name}</td>
+									<td>{$data.add_time}</td>
+									<td><span>成功</span></td>
+									<td>{$data.username}</td>
+									<td><a href="__CONTROLLER__/content?id={$data.id}">查看</a></td>
+								</tr>
+								</foreach>
+								</tbody>
+							</table>
+						</div>
+						<empty name="list">
+							<div style="margin:200px 0; width:100%; font-size:30px; color:#ddd; text-align:center; ">未获取到相关数据</div>
+						</empty>
+					</div>
+					<!--内容結束-->
+					<!--分页开始-->
+					<div class="float_r mt15">
+						<div class="dataTables_paginate paging_simple_numbers">
+							{$pageNav}
+						</div>
+					</div>
+					<!--分页结束-->
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<div id="iacImportBox" style="display:none; ">
+	    <form action="__CONTROLLER__/import" method="post" id="addFileFrom" enctype="multipart/form-data">
+	        <div class="mb10">请选择需要导入的Excel文件</div>
+	        <div class="mb10">注：导入文件请勿超过5M。</div>
+	        <div class="mb10" style="color:red">每月导入上月数据，请勿重复导入</div>
+	        <input type="file" name="iacFile" style="width:250px; font:300 1em PingFang SC;"/>
+	        <div style="display:none;">
+	            <input type="submit" value="提交">
+	            <input type="reset" class="fromReset" value="重置表单">
+	        </div>
+	    </form>
+	</div>
+	
+	<div id="iacSetBox" style="display:none; ">
+        <div class="mb10">
+        	<input type="checkbox" name="iacStatus" id="iacStatus" value="{$iacStatus}" <if condition="$iacStatus eq 1"> checked="checked" </if> />
+			<span style="line-height:35px; margin-left:5px; ">学时是否包含中保协课程</span>
+		</div>
+        <div class="mb10">注：选择不包含中保协课程时，隐藏中保协相关数据展示</div>
+	</div>
+	
+	<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="__PUBLIC__/Css/bootstrap/js/bootstrap.min.js"></script>
+	<script src="__PUBLIC__/plugins/iCheck/icheck.min.js"></script>
+	<script src="__PUBLIC__/plugins/layer/layer.js"></script>
+	<script type="text/javascript">
+		$('input').iCheck({
+			labelHover: false,
+			cursor: true,
+			checkboxClass: 'icheckbox_square-blue',
+			radioClass: 'iradio_minimal-blue',
+			increaseArea: '20%'
+		});
+		
+		//列表行悬停效果
+		$("tbody tr").mouseover(function(){
+			$(this).css("background-color","#e5e5e5");
+		}).mouseout(function(){
+			$(this).css("background-color","#fff");
+		});
+		
+		function iac_import() {
+	        $("#addFileFrom .fromReset").click();
+	        layer.open({
+	            title: '中保协数据导入',
+	            btn: ['确定', '取消'],
+	            type: 1,
+	            skin: 'layui-layer-lan', //样式类名
+	            closeBtn: 1, //显示关闭按钮
+	            anim: 2,
+	            area: ['340px', '250px'],
+	            shadeClose: true, //开启遮罩关闭
+	            content: $("#iacImportBox"),
+	            yes: function (index, layero) {
+	                var is_file = $("#addFileFrom input[type='file']").val();
+	                if (is_file == '') {
+	                    layer.msg('请选择导入文件', {
+	                        time: 1000
+	                    });
+	                    return false;
+	                }
+	                var pos = is_file.lastIndexOf(".");
+	                var format = is_file.substring(pos + 1).toLowerCase();
+	                if (format != 'xls' && format != 'xlsx' && format != 'csv') {
+	                    layer.msg('上传文件格式不正确', {
+	                        time: 1000
+	                    });
+	                    return false;
+	                }
+
+	                var formData = new FormData($('#addFileFrom')[0]);
+	                var saveLoad = layer.load(0);
+	                $.ajax({
+	                    type: "POST",
+	                    url: "__CONTROLLER__/import",
+	                    data: formData,
+	                    dataType: "json",
+	                    contentType: false,
+	                    processData: false,
+	                    success: function (data) {
+	                        layer.close(saveLoad);
+	                        if (data.code == 1000) {
+	                            layer.closeAll();
+	                            layer.msg('导入成功', {
+	                                time: 1000
+	                            }, function () {
+	                                window.location.href = "__CONTROLLER__/listPage";
+	                            });
+	                        } else {
+	                            layer.msg(data.message, {
+	                                time: 2000
+	                            });
+	                        }
+	                    }
+	                });//ajax end
+	                return false;
+	            }
+	        });
+	    }
+		
+		//中保协设置
+		function iac_set(){
+	        layer.open({
+	            title: '中保协数据设置',
+	            btn: ['确定', '取消'],
+	            type: 1,
+	            skin: 'layui-layer-lan', //样式类名
+	            closeBtn: 1, //显示关闭按钮
+	            anim: 2,
+	            area: ['340px', '250px'],
+	            offset: '50px',
+	            shadeClose: true, //开启遮罩关闭
+	            content: $("#iacSetBox"),
+	            yes: function (index, layero) {
+	            	var checked = $("#iacSetBox").find("input").prop("checked");
+	            	var iacStatus = 0;
+	            	if(checked){
+	            		iacStatus = 1;
+	            	}
+	                $.ajax({
+	                    type: "POST",
+	                    url: "__CONTROLLER__/set",
+	                    data: "iacStatus="+iacStatus,
+	                    dataType: "json",
+	                    success: function (data) {
+	                    	layer.msg('设置成功', {time: 1000}, function(){
+	                    		layer.closeAll();
+	                    	});
+	                    }
+	                });//ajax end
+	            }
+	        });
+		}
+	</script>
+</body>
+</html>

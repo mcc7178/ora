@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>活动列表</title>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+ 		<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+  		<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+  		<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+ 		<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+  		<link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+  		<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+  		<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/layer/skin/layer.css">
+		<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+		<style type="text/css">
+			a {
+				color: #337ab7;
+			}
+			
+			a:hover,
+			a:active,
+			a:focus {
+				outline: none;
+				text-decoration: none;
+				color: #03A9F4;
+			}
+			
+			.ulitem {
+				padding: 10px;
+				border: 1px #dcdcdc solid;
+				width: 295px;
+				float: left;
+			}
+			
+			.course_img {
+				position: relative;
+			}
+			
+			.course_time {
+				padding: 7px;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 9999999;
+				color: #fff;
+				position: absolute;
+				right: 0px;
+				left: 0px;
+				bottom: 0px;
+				text-align: center;
+			}
+			
+			.integral_stati {
+				display: block;
+				margin: 0 auto;
+				border: 16px solid #fff;
+				width: 138px;
+				height: 138px;
+				border-radius: 50%;
+				color: #fff;
+				font-size: 1.6rem;
+				box-shadow: 0 1px 8px rgba(0, 0, 0, .2);
+				line-height: 110px;
+				overflow: hidden;
+				cursor: default;
+			}
+			
+			.jifenbt {
+				cursor: pointer;
+				background-color: #46bbdf;
+				width: 205px;
+				text-align: center;
+				margin: auto;
+				color: white;
+				border-radius: 5px;
+			}
+			
+			.form-control:focus {
+				border-color: #46bbdf;
+				box-shadow: none;
+			}
+			
+			.fuli_name {
+				font-size: 24px;
+			}
+			
+			.text-gray {
+				color: #7b7777!important;
+			}
+			
+			.leibie {
+				font-size: 22px;
+				text-align: right;
+				padding-top: 0px;
+				font-weight: 600;
+			}
+			
+			.course_right {
+				margin-left: 310px;
+			}
+			.bg_ok{
+			background-color: rgba(11, 99, 42, 0.8);	
+			}
+			.bg_dai{
+			background-color: rgba(191, 102, 10, 0.8);	
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--内容区域顶栏面包屑开始-->
+		<section class="content-header">
+			<h1 class="info_title">
+			首页
+			<small>/活动列表</small>
+		</h1>
+
+			<ol class="breadcrumb">
+				<li>
+					<a href="#" class="text-grey"><i class="fa fa-mail-reply-all"></i>返回</a>
+				</li>
+			</ol>
+		</section>
+		<!--内容区域顶栏面包屑结束-->
+		<section class="content">
+			<div>
+				<div class="nav-tabs-custom">
+					<ul class="nav nav-tabs">
+						<li <if condition="$type eq 0"> class="active"</if>>
+							<a href="__ACTION__/type/0">所有活动</a>
+						</li>
+						<li <if condition="$type eq 1"> class="active"</if>>
+							<a href="__ACTION__/type/1">已报名</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane <if condition='$type eq 0'>active</if>" id="sure_fabu">
+							<!--所有活动开始-->
+							<div>
+								<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+									<!--内容开始-->
+									<!--筛选栏开始-->
+									<div class="row mt10">
+                                        <form action="{:U('Admin/ActivityApply/index',array('type'=>0))}" method="get">
+										<div class="col-sm-4">
+											<div class="input-group " style="width: 80%;">
+												<input type="text" name="table_search" class="form-control pull-right" value="{$keyword0}" placeholder="输入活动名称……">
+												<div class="input-group-btn">
+													<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+												</div>
+											</div>
+										</div>
+                                        </form>
+									</div>
+									<!--筛选栏结束-->
+									<div class="row ">
+
+
+										<foreach name="data0" item="vo">
+											<div class="row ">
+												<div class="col-sm-12 mt20">
+													<div class="box-header with-border">
+
+														<div class="ulitem">
+															<a href="{:U('Admin/ActivityApply/show',array('id'=>$vo['id']))}">
+															<div class="course_img">
+																<img width="100%" src="{$vo['activity_covers']}" onerror="this.src='/Public/Dist/img/activity.jpg'" />
+															</div>
+															</a>
+														</div>
+														<div class="course_right">
+															<div class="fuli_name">
+																{$vo['activity_name']}
+															</div>
+															<div class="mt10">
+																活动地点：<span>{$vo['address']}</span>
+															</div>
+															<div class="mt10">
+																报名时间：<span>{$vo['apply_start_time']}  至  {$vo['apply_end_time']}</span>
+															</div>
+															<div class="mt10">
+																<p>活动简介：</p>
+																<p class="text-gray mt5">
+																{$vo['activity_description']}	
+																</p>
+															</div>
+
+														</div>
+													</div>
+												</div>
+											</div>
+											</foreach>
+
+									</div>
+
+									<!--内容結束-->
+									<!--分页开始-->
+									<div class="row">
+										<div class="float_r mr15">
+											<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+												<ul class="pagination">
+													{$page0}
+												</ul>
+											</div>
+										</div>
+									</div>
+									<!--分页结束-->
+								</div>
+
+							</div>
+							<!--所有活动结束-->
+						</div>
+
+						<div class="tab-pane <if condition='$type eq 1'>active</if>" id="none_fabu">
+							<!--报名列表开始-->
+							<div>
+								<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+									<!--内容开始-->
+									<!--筛选栏开始-->
+									<div class="row mt10">
+										<div class="col-sm-4">
+											<form action="{:U('Admin/ActivityApply/index',array('type'=>1))}" method="get">
+											<div class="input-group " style="width: 80%;">
+												<input type="text" name="table_search" class="form-control pull-right" value="{$keyword1}" placeholder="输入活动名称……">
+												<div class="input-group-btn">
+													<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+												</div>
+											</div>
+											</form>
+										</div>
+									</div>
+									<!--筛选栏结束-->
+									<div class="row ">
+
+
+
+
+
+                                        <foreach name="data1" item="vo">
+										<div class="col-sm-12 mt20">
+											<div class="box-header with-border">
+
+												<div class="ulitem">
+													<a href="{:U('Admin/ActivityApply/show',array('id'=>$vo['id']))}">
+													<div class="course_img">
+														<img width="100%" src="{$vo['activity_covers']}" onerror="this.src='/Public/Dist/img/activity.jpg'" />
+
+                                                        <if condition="$vo['status'] eq 1">
+														<div class="course_time bg_ok"><spn>报名成功</spn></div>
+                                                        <elseif condition="$vo['status'] eq 0" />
+                                                         <div class="course_time bg_dai"><spn>等待审核 </spn></div>
+                                                        </if>
+                                                    
+													</div>
+													</a>
+												</div>
+
+												<div class="course_right">
+													<div class="fuli_name">
+														{$vo['activity_name']}
+													</div>
+													<div class="mt10">
+														活动地点：<span>{$vo['address']}</span>
+													</div>
+													<div class="mt10">
+														活动时间：<span>{$vo['activity_start_time']}  至  {$vo['activity_end_time']}</span>
+													</div>
+													<div class="mt10">
+														<p>活动简介：</p>
+														<p class="text-gray mt5">
+															{$vo['activity_description']}	
+														</p>
+													</div>
+
+												</div>
+											</div>
+										</div>
+                                        </foreach>
+
+
+
+<!--
+
+										<div class="col-sm-12 mt20">
+											<div class="box-header with-border">
+
+												<div class="ulitem">
+													<div class="course_img">
+														<img width="100%" src="../dist/img/class5.png">
+														<div class="course_time bg_dai">
+															<spn>等待审核</spn>
+														</div>
+													</div>
+												</div>
+
+												<div class="course_right">
+													<div class="fuli_name">
+														已报名活动
+													</div>
+													<div class="mt10">
+														活动地点：<span>综合楼A009</span>
+													</div>
+													<div class="mt10">
+														报名时间：<span>2017-08-08 12:00  至  2017-08-08  13:00</span>
+													</div>
+													<div class="mt10">
+														<p>活动简介：</p>
+														<p class="text-gray mt5">
+															这里是部落简介区域 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget. </p>
+													</div>
+
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-12 mt20">
+											<div class="box-header with-border">
+
+												<div class="ulitem">
+													<a href="CCC_huoodng_look.html">
+													<div class="course_img">
+														<img width="100%" src="../dist/img/class4.png">
+														<div class="course_time">
+															<spn>活动结束</spn>
+														</div>
+													</div>
+													</a>
+												</div>
+
+												<div class="course_right">
+													<div class="fuli_name">
+														活动名称有多长显示多长
+													</div>
+													<div class="mt10">
+														活动地点：<span>综合楼A009</span>
+													</div>
+													<div class="mt10">
+														报名时间：<span>2017-08-08 12:00  至  2017-08-08  13:00</span>
+													</div>
+													<div class="mt10">
+														<p>活动简介：</p>
+														<p class="text-gray mt5">
+															这里是部落简介区域 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget. </p>
+													</div>
+
+												</div>
+											</div>
+										</div>-->
+
+									</div>
+
+									<!--内容結束-->
+									<!--分页开始-->
+									<div class="row">
+										<div class="float_r mr15">
+											<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+												<ul class="pagination">
+													{$page1}
+												</ul>
+											</div>
+										</div>
+									</div>
+									<!--分页结束-->
+								</div>
+
+							</div>
+							<!--未发布列表结束-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		 <script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		 <script src="__PUBLIC__/Js/js/js/bootstrap.min.js"></script>
+		 <script src="__PUBLIC__/plugins/fastclick/fastclick.js"></script>
+		 <script src="__PUBLIC__/Dist/js/app.min.js"></script>
+		 <script src="__PUBLIC__/plugins/sparkline/jquery.sparkline.min.js"></script>
+		 <script src="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+		 <script src="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+		 <script src="__PUBLIC__/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+		 <script src="__PUBLIC__/plugins/chartjs/Chart.min.js"></script>
+		 <script src="__PUBLIC__/plugins/iCheck/icheck.min.js"></script>
+		 <script src="__PUBLIC__/plugins/ckeditor/ckeditor.js"></script>
+		 <script src="__PUBLIC__/Dist/js/demo.js"></script>
+		 <script src="__PUBLIC__/plugins/layer/layer.js"></script>
+	   	 <script type="text/javascript">
+			//radio选中样式
+			$('input').iCheck({
+				labelHover: false,
+				cursor: true,
+				checkboxClass: 'icheckbox_square-blue',
+				radioClass: 'iradio_minimal-blue',
+				increaseArea: '20%'
+			});
+
+		</script>
+	</body>
+
+</html>

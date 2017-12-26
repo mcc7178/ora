@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>添加课程</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+    <link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+    <link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/statics/layer/skin/layer.css">
+    <link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/uploadify/Huploadify.css"/>
+    <style type="text/css">
+        .uploadify-progress{
+            width: 300px;
+        }
+
+    </style>
+</head>
+<body>
+<div style="padding: 10px">
+    <div class="mb10">一、请输入章节名称</div>
+    <div class="form-group"><input type="email" class="form-control" name="name" id="name" placeholder="请输入章节名称"></div>
+    <div class="mb10">二、请输入多媒体地址</div>
+    <div class="mb10">
+        <div class="form-group">
+            <div class="col-sm-8"><input type="text" class="form-control" name="media_address" placeholder="多媒体地址" id="media_address"></div>
+            <div for="inputEmail3" class="col-sm-4 " style="padding-left: 0px;margin-left: 10px; margin-top:15px" id="container">
+                <div id="upload"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="body">
+            <div class="col-md-12 ">
+
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: 60px;">
+    	<p>1：支持第三方多媒体视频链接；</p>
+    	<p>2：使用课件时，请复制课件地址到多媒体地址处；<a href="{:U('scorm/course/index')}" target="_blank">使用课件地址</a></p>
+        <p>3：上传课件仅支持：<br/>&nbsp;&nbsp;&nbsp;&nbsp;mp4视频格式；
+        <br/>&nbsp;&nbsp;&nbsp;&nbsp;ppt/pptx、doc/docx、xls/xlsx等文档格式；
+        <br/>&nbsp;&nbsp;&nbsp;&nbsp;jpg等图片格式;单个文件在500MB之内。</p>
+    	<p>4：office文件转换为在线预览需要时间，请耐心等待。</p>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="__PUBLIC__/Js/jquery-1.9.1.min.js"></script>
+<script  src="__PUBLIC__/uploadify/jquery.Huploadify.js"></script>
+<script type="text/javascript">
+    $(function(){
+
+       $('#upload').Huploadify({
+            auto:false,
+            fileTypeExts:'*.jpg;*.png;*.exe;*.mp3;*.mp4;*.zip;*.doc;*.docx;*.ppt;*.pptx;*.xls;*.xlsx;*.pdf;*.avi;*.wmv',
+            multi:true,
+            fileSizeLimit:99999999,
+            breakPoints:true,
+            saveInfoLocal:true,
+            showUploadedPercent:true,//是否实时显示上传的百分比，如20%
+            showUploadedSize:true,
+            removeTimeout:9999999,
+            uploader:"{:U('File/file_update')}",
+            onUploadSuccess:function(file,data){
+
+                var url = JSON.parse(data);
+
+                $('#media_address').attr('value',url.src);
+
+            }
+        });
+
+    });
+</script>
+</html>

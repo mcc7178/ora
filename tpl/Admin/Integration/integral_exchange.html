@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>积分中心</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="__PUBLIC__/plugins/layer/skin/layer.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+<style>
+.saveExcRule {
+	cursor: pointer;
+}
+
+.ruleVal {
+	text-align: center;
+	font-size: 16px;
+	width: 100px;
+	height: 30px;
+}
+</style>
+</head>
+<body>
+	<!--内容区域顶栏面包屑开始-->
+	<section class="content-header">
+		<h1 class="info_title">
+			积分中心 <small>/学分兑换</small>
+		</h1>
+
+	</section>
+	<!--内容区域顶栏面包屑结束-->
+	<section class="content">
+		<div>
+			<div class="dataTables_wrapper form-inline dt-bootstrap ">
+				<div class="nav-tabs-custom">
+					<ul id="myTab" class="nav nav-tabs">
+						<li><a href="{:U('admin/integration/integrationlist')}">积分规则</a></li>
+						<!--<li><a href="{:U('admin/integration/integrationhistorylist','tabType=2')}">积分流水</a></li>-->
+						<li class="active"><a href="{:U('admin/integration/integralExchange')}">学分兑换率</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class=" ">
+							<div class="box-body">
+								<table class="table table-hover" style="width: 500px;">
+									<thead>
+										<tr style="background: #ddd;">
+											<!--<th>组织架构</th>-->
+											<th>每学分可兑换积分</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><input type="text" class="ruleVal" value="{$data.exc_rule}" disabled /> <input type="hidden" class="planId" value="{$data.plan_id}" /></td>
+											<td><span class="saveExcRule">修改</span></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="__PUBLIC__/Css/bootstrap/js/bootstrap.min.js"></script>
+	<script src="__PUBLIC__/plugins/iCheck/icheck.min.js"></script>
+	<script src="__PUBLIC__/plugins/layer/layer.js"></script>
+	<script type="text/javascript">
+		$(".saveExcRule").click(function(){
+			var opttext = $(this).text();
+			if(opttext == "保存"){
+				var planId = $(this).closest("tr").find(".planId").val();
+				var ruleVal = $(this).closest("tr").find(".ruleVal").val();
+				ruleVal = $.trim(ruleVal);
+				if(!ruleVal){
+					layer.msg("可兑换积分必须填写", {time:800});
+					return false;
+				}
+				var loading = layer.load();
+				var _this = $(this);
+				$.ajax({
+					type: "post",
+					url: "__CONTROLLER__/saveExchangeRule",
+					data: "planId="+planId+"&ruleVal="+ruleVal,
+					dataType: "json",
+					success: function(data){
+						layer.close(loading);
+						if(data.code == 1000){
+							layer.alert("保存成功");
+							_this.closest("tr").find("input").attr("disabled", true);
+							_this.text("修改");
+						}else{
+							layer.alert(data.message);
+						}
+					}
+				});
+				
+			}else{
+				$(this).closest("tr").find("input").attr("disabled", false);
+				$(this).text("保存");
+			}
+		});
+	</script>
+</body>
+</html>

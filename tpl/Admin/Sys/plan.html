@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>系统配置方案</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+<style type="text/css">
+.layui-layer-content>.form-horizontal>.box-body>.form-group {
+	margin-right: 0px !important;
+	margin-left: 0px !important;
+}
+
+.category_input {
+	width: 250px;
+}
+</style>
+
+</head>
+<body>
+
+	<!--内容区域顶栏面包屑开始-->
+	<section class="content-header">
+		<h1 class="info_title">
+			系统配置方案 <small>/配置管理</small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="javascript:history.go(-1)"><i class="fa fa-mail-reply-all"></i>返回</a></li>
+		</ol>
+	</section>
+	<!--内容区域顶栏面包屑结束-->
+	<section class="content">
+		<div class="box">
+			<div class="box-body">
+				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+					<!--筛选栏开始-->
+					<div class="row mb10 mt10">
+					<form method="get" action="">
+						<div class="col-sm-12">
+							<div class="input-group ">
+								<input type="text" name="keyword" class="form-control pull-right" value="{$keyword}" placeholder="请输入类别名称搜索">
+								<div class="input-group-btn">
+									<button type="submit" class="btn btn-default">
+										<i class="fa fa-search"></i>
+									</button>
+								</div>
+							</div>
+							<a type="button" class="btn btn-success ml30" onclick="add_plan();"> <i class="fa fa-plus "></i>新建配置方案
+							</a>
+						</div>
+					</form>
+					</div>
+					<!--筛选栏结束-->
+					<!--内容开始-->
+					<div class="row">
+						<div class="col-sm-12">
+							<table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+								<thead>
+									<tr role="row">
+										<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">配置方案名称</th>
+										<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">操作</th>
+									</tr>
+								</thead>
+								<tbody class="category_table">
+									<foreach name='list' item='data'>
+										<tr role="row" class="odd">
+											<td>{$data.plan_name}</td>
+											<td>
+												<a onclick="edit_name('{$data.id}','{$data.plan_name}');" class="bs-callout-info mr20"> <i class="fa fa-edit mr5"></i>修改名称</a> 
+												<a onclick="edit_range('{$data.id}');" class="bs-callout-info mr20"> <i class="fa fa-circle-o mr5"></i>生效范围</a> 
+												<a href="#" class="color_or mr20" onclick="del_plan('{$data.id}','{$data.plan_name}');"> <i class="fa fa-trash-o mr5"></i>删除</a>
+											</td>
+										</tr>
+									</foreach>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!--内容結束-->
+					<!--分页开始-->
+					<div class="row">
+						<div class="float_r mr15">
+							<div class="dataTables_paginate paging_simple_numbers">
+								{$pageNav}
+							</div>
+						</div>
+					</div>
+					<!--分页结束-->
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="__PUBLIC__/Css/bootstrap/js/bootstrap.min.js"></script>
+	<script src="__PUBLIC__/plugins/iCheck/icheck.min.js"></script>
+	<script src="__PUBLIC__/plugins/layer/layer.js"></script>
+	<script type="text/javascript">
+		//radio选中样式
+		$('input').iCheck({
+			labelHover : false,
+			cursor : true,
+			checkboxClass : 'icheckbox_square-blue',
+			radioClass : 'iradio_minimal-blue',
+			increaseArea : '20%'
+		});
+
+		//新建配置方案
+		function add_plan() {
+			layer.open({
+				content : '<div class="mb10">配置方案名称：</div><div><input class="form-control" id="planName" type="text" maxlength="20" name="tname" placeholder="请输入新增的方案名称"></div>',
+				title : '新建配置方案',
+				btn : [ '新增', '取消' ],
+				yes : function() {
+					var plan_name = $('#planName').val();
+					if (plan_name == '') {
+						layer.alert('方案名称不能为空!', {
+							icon : 2
+						});
+						return false;
+					} else {
+						$.ajax({
+							type : "POST",
+							url : "__CONTROLLER__/addPlan",
+							data :"plan_name="+plan_name,
+							dataType : "json",
+							success : function(data) {
+								if(data.code == 1000){
+									layer.alert('新建成功,1秒后自动关闭', {
+										icon : 1
+									});
+									setTimeout(
+											"location.reload();",
+											1000);//刷新当前页面.
+								}else{
+									layer.msg(data.message);
+								}
+							}
+						});
+					}
+				},
+				skin : 'layui-layer-lan', //样式类名
+				closeBtn : 1, //显示关闭按钮
+				anim : 2,
+				shadeClose : true
+			//开启遮罩关闭
+			})
+		}
+		
+		//修改方案名称
+		function edit_name(plan_id,old_name) {
+			layer.open({
+				content : '<div class="mb10">配置方案名称：</div><div><input class="form-control" id="planName" type="text" maxlength="20" value="'+old_name+'" name="tname" placeholder="请输入修改的方案名称"></div>',
+				title : '修改配置方案',
+				btn : [ '修改', '取消' ],
+				yes : function() {
+					var plan_name = $('#planName').val();
+					if (plan_name == '') {
+						layer.alert('方案名称不能为空!', {
+							icon : 2
+						});
+						return false;
+					} else {
+						$.ajax({
+							type : "POST",
+							url : "__CONTROLLER__/editPlan",
+							data :"id="+plan_id+"&plan_name="+plan_name,
+							dataType : "json",
+							success : function(data) {
+								if(data.code == 1000){
+									layer.alert('修改成功,1秒后自动关闭', {
+										icon : 1
+									});
+									setTimeout(
+											"location.reload();",
+											1000);//刷新当前页面.
+								}else{
+									layer.msg(data.message);
+								}
+							}
+						});
+					}
+				},
+				skin : 'layui-layer-lan', //样式类名
+				closeBtn : 1, //显示关闭按钮
+				anim : 2,
+				shadeClose : true
+			//开启遮罩关闭
+			})
+		}
+
+		//删除
+		function del_plan(plan_id, plan_name) {
+			layer.confirm('当前方案：'+plan_name+'<br/>您确定要删除该方案吗？', {
+				title : '删除方案',
+				btn : [ '确定', '取消' ],
+				shadeClose : true, //开启遮罩关闭
+				skin : 'layui-layer-lan'
+			//按钮
+			}, function() {
+				$.ajax({
+					type : "POST",
+					url : "__CONTROLLER__/delPlan",
+					data :"plan_id="+plan_id,
+					dataType : "json",
+					success : function(data){
+						if(data.code == 1000){
+							layer.alert('修改成功,1秒后自动关闭', {
+								icon : 1
+							});
+							setTimeout(
+									"location.reload();",
+									1000);//刷新当前页面.
+						}else{
+							layer.msg(data.message);
+						}
+					}
+				});
+			});
+		}
+
+		//生效范围
+		function edit_range(plan_id) {
+			layer.open({
+				title: '生效范围',
+				btn: ['确定','取消'],
+				yes: function (index, layero){
+					var body = layer.getChildFrame('body',index);
+					var range_id = new Array();
+					body.find("input:checked").each(function(i){
+						range_id += $(this).val();
+						range_id += ",";
+					});
+					$.ajax({
+						type : "POST",
+						url : "__CONTROLLER__/saveRange",
+						data :"plan_id="+plan_id+"&tissueIds="+range_id,
+						dataType : "json",
+						success : function(data){
+							if(data.code == 1000){
+								layer.alert('修改成功,1秒后自动关闭', {
+									icon : 1
+								});
+								setTimeout(
+										"location.reload();",
+										1000);//刷新当前页面.
+							}else{
+								layer.msg(data.message);
+							}
+						}
+					});
+				},
+				area: ['600px', '400px'],
+				type: 2,
+				skin: 'layui-layer-lan', //样式类名
+				closeBtn: 1, //显示关闭按钮
+				anim: 2,
+				shadeClose: true, //开启遮罩关闭
+				content: "__CONTROLLER__/getRange?plan_id="+plan_id
+			});
+		}
+		
+		
+		//列表行悬停效果
+		$("tbody tr").mouseover(function(){
+			$(this).css("background-color","#ddd");
+		}).mouseout(function(){
+			$(this).css("background-color","#fff");
+		});
+	</script>
+</body>
+</html>

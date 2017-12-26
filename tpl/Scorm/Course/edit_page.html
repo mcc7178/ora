@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="textml; charset=utf-8" />
+<meta name="author" content="RYD"/>
+<title>编辑课程</title>
+<script type="text/javascript" src="__PUBLIC__/Scorm/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Scorm/plugins/layer_v3.0.3/layer.js"></script>
+
+<link rel="stylesheet" href="__PUBLIC__/Scorm/plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+<script src="__PUBLIC__/Scorm/plugins/bootstrap-3.3.7/js/bootstrap.min.js" ></script>
+<style type="text/css">
+	@CHARSET "UTF-8";
+	main.*{margin:0; padding:0; color:#444; font-family:"Microsoft YaHei","宋体";}
+	a{text-decoration: none; }
+	input,button,select,textarea{outline:none; }
+	ul,ol{list-style: none; }
+	img{border: 0; }
+	.txtc{text-align:center; }
+	.fl{display:block; float:left; }
+	.pdl10{padding-left:10px; }
+	.pdl20{padding-left:20px; }
+	.main{width:1200px; margin:30px auto; }
+	h3{margin:15px 0 40px 0; color:#777; font-weight:700; text-align:center; }
+	
+</style>
+</head>
+<body>
+<div class="main">
+	<form class="form-horizontal" method="post" action="" id="edit_form">
+		<input type="hidden" name="scoid" value="{$sco.id}"/>
+		<h3>编辑课程</h3>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">课程名称：</label>
+			<div class="col-sm-4">
+				<input type="text" name="scoName" class="form-control" placeholder="请输入课程名字" value="{$sco.name}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">课程描述：</label>
+			<div class="col-sm-4">
+				<input type="text" name="scoDesc" class="form-control" placeholder="请输入课程描述" value="{$sco.desc}">
+			</div>
+		</div>
+		
+		<div class="form-group" >
+			<label class="col-sm-2 control-label" style="margin-bottom: -30px;">章节列表：</label>
+		</div>
+		<foreach name="scoChap" item="data">
+			<input type="hidden" name="entry[]" value="{$data.id}"/>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-4">
+					<input type="text" name="chapName[]" class="form-control" placeholder="请输入章节名称" value="{$data.name}">
+				</div>
+				<!-- <label class="col-sm-1 control-label">学时：</label>
+				<div class="col-sm-2">
+					<input type="text" name="time[]" class="form-control" placeholder="请输入学时" value="{$data.time_len}">
+				</div>
+				<label class="control-label">单位（秒）</label> -->
+			</div>
+		</foreach>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-2">
+				<button type="button" class="btn btn-block btn-primary saveSco">保存</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	$(".saveSco").click(function(){
+		var saveData = $("#edit_form").serialize();
+		$.ajax({
+			type: "post",
+			url: "__CONTROLLER__/saveSco",
+			data: saveData,
+			dataType: "json",
+			success: function(data){
+				if(data.code == 1000){
+					layer.msg('课程修改成功');
+					setTimeout(function(){
+						location.href = "__CONTROLLER__/index"
+                    }, 1000);
+				}else{
+					layer.alert(data.message);
+				}
+			}
+		});
+	});
+</script>
+</body>
+</html>

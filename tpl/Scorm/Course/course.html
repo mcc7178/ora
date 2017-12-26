@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="textml; charset=utf-8" />
+<if condition="$v eq 'wap'">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta  name="applicable-device"  content="mobile">
+</if>
+<meta name="author" content="RYD"/>
+<title>课程播放-融易点</title>
+<script type="text/javascript" src="__PUBLIC__/Scorm/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Scorm/plugins/layer_v3.0.3/layer.js"></script>
+<style type="text/css">
+@CHARSET "UTF-8";
+*{margin:0; padding:0; color:#5E5E5E; font-family:"Microsoft YaHei","宋体";}
+a{text-decoration: none; }
+input,button,select,textarea{outline:none; }
+ul,ol{list-style: none; }
+img{border: 0; }
+
+body{background:#000; }
+.top{display:none; position:absolute; z-index:1; width:100%; height:58px; background:#000; }
+.toplogo{float:left; margin-left:30px; line-height:58px; font-size:20px; color:#bbb; }
+.chapCon{position:fixed; top:0; right:0; z-index:9; margin:18px 20px 0 0; height:21px; }
+.chapCon img{float:left; height:21px; }
+.chapCon p{float:left; margin-left:6px; height:21px; font-size:15px; line-height:21px; color:#eee; }
+.showList{padding:10px; background:#212121; }
+.chapCon,img.closeMenu{cursor:pointer; }
+
+.listShow{position:absolute; right:0; top:0; z-index:10; padding:30px 0; width:200px; height:2000px; background:#212121; }
+.listTop{float:left; margin:0 0 15px 15px; }
+.listTop img{float:left; }
+.listTop p{float:left; margin-left:6px; line-height:25px; font-size:14px; font-weight:bold; color:#bbb;}
+.chapList{float:left; overflow:auto; }
+.chapList li{padding:0 15px; line-height:30px; color:#989999; }
+.chapList li:hover,.chapList li.active{background:#333; cursor:pointer; }
+
+.main{position:absolute; z-index:1; right:50px; top:0; bottom:0; left:0; overflow: hidden; background: #212121;  }
+.main iframe {width: 100%; height: 100%; }
+
+.bottom{position:absolute; z-index:1; width:100%; left:0px; bottom: 0px; right: 0px; height:50px; background: #000; }
+body{overflow:hidden; }
+<if condition="$v eq 'wap'">
+body{
+	transform:rotate(90deg);
+	-webkit-transform:rotate(90deg);
+	-moz-transform:rotate(90deg);
+}
+</if>
+</style>
+</head>
+<body>
+<!-- 页头 -->
+<div class="top">
+    <div class="toplogo">
+        {$sco.name}
+    </div>
+    <div class="chapCon">
+		<img src="__PUBLIC__/Scorm/images/ml1.png" class="openMenu"/>
+		<p>目录</p>
+	</div>
+</div>
+<div class="chapCon">
+	<img src="__PUBLIC__/Scorm/images/ml1.png" class="openMenu"/>
+	<p>目录</p>
+</div>
+<!-- 章节目录 -->
+<div class="listShow" style="display:none; ">
+	<div class="listTop">
+		<img src="__PUBLIC__/Scorm/images/yc.png" class="closeMenu"/>
+		<p>课程目录</p>
+	</div>
+	<div class="chapList">
+		<ul>
+			<foreach name="scoChap" item="data">
+			<li>{$data.name}<input type="hidden" class="entry" value="{$data.id}"></li>
+			</foreach>
+		</ul>
+	</div>
+</div>
+
+<!-- 播放区 -->
+<div class="main">
+	<iframe id="courseUrl" style="border:0px; overflow: hidden; width:100%; height:100%;" src=""></iframe>
+</div>	
+
+<!-- 页尾 -->
+<!-- <div class="bottom"></div>
+ -->
+<script type="text/javascript">
+	$(".chapCon").click(function(){
+		$(".listShow").show();
+		
+		if(!!window.ActiveXObject || "ActiveXObject" in window){
+			$(".main").css({"right":"200px"});
+		}
+		var userAgent = navigator.userAgent;
+		if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1){
+			$(".main").css({"right":"200px"});
+		}
+		var pageHeight = $(window).height() - 60;
+		//$(".listShow").css({"height":pageHeight+"px"});
+	});
+	
+	$(".chapList li").click(function(){
+		var entry = $(this).find(".entry").val();
+		var url = "__CONTROLLER__/getCourse?comid={$comid}&scoid={$scoid}&entry="+entry+"&student_id={$student_id}&outid={$outid}&v={$v}";
+		$("#courseUrl").attr("src", url);
+		
+		$(".chapList li").removeClass("active");
+		$(this).addClass("active");
+	});
+	
+	$(".closeMenu").click(function(){
+		$(".listShow").hide();
+		$(".main").css({"right":"50px"});
+	});
+	
+	$(".chapList li").eq(0).click();
+</script>
+</body>
+</html>

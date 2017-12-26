@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>中保协-文件内容</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+<style type="text/css">
+	.txtc{text-align:center; }
+	table{width:100%; }
+	tr{width:100%; height:40px; border-bottom:1px dashed #ccc; }
+	tr td{text-align:center; }
+	tr td a{color:#1f82c5; }
+	tr td a:hover{text-decoration:underline; cursor:pointer; }
+	tr.title{background:#ddd; }
+	tr.title th{text-align:center;}
+</style>
+</head>
+<body>
+
+	<!--内容区域顶栏面包屑开始-->
+	<section class="content-header">
+		<h1 class="info_title">
+			中保协数据管理 <small>/查看文件内容</small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="__CONTROLLER__/listPage" class="text-grey"><i class="fa fa-mail-reply-all"></i>返回</a></li>
+		</ol>
+	</section>
+	<!--内容区域顶栏面包屑结束-->
+	<section class="content">
+		<div class="box">
+			<div class="box-body">
+				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+					<!--筛选栏开始-->
+					<div class="row mb10 mt10">
+						<form>
+						<div class="col-sm-12">
+							<div class="input-group ">
+								<input type="hidden" name="id" value="{$id}"/>
+								<input type="text" name="title" value="{$title}" class="form-control pull-right" placeholder="请输入姓名" style="width: 200px;">
+								<div class="input-group-btn">
+									<button type="submit" class="btn btn-default">
+										<i class="fa fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						</form>
+					</div>
+					<!--筛选栏结束-->
+					<!--内容开始-->
+					<div class="row">
+						<div class="col-sm-12">
+							<table>
+								<thead>
+								<tr class="title">
+									<th style="width:5%;" >序号</th>
+									<th style="">登录账号</th>
+									<th style="width:5%;">姓名</th>
+									<th style="">邮箱</th>
+									<th style="width:5%;">手机号</th>
+									<th style="">学习时间</th>
+									<th style="width:8%;">学习时长（秒）</th>
+									<th style="">课程名称</th>
+								</tr>
+								</thead>
+								<tbody>
+								<foreach name="list" item="data" key="key">
+								<tr>
+									<td>{$key+1}</td>
+									<td>{$data.login_name}</td>
+									<td>{$data.username}</td>
+									<td>{$data.email}</td>
+									<td>{$data.phone}</td>
+									<td>{$data.study_time}</td>
+									<td>{$data.study_len}</td>
+									<td>{$data.course_name}</td>
+								</tr>
+								</foreach>
+								
+								</tbody>
+							</table>
+						</div>
+						<empty name="list">
+							<div style="margin:200px 0; width:100%; font-size:30px; color:#ddd; text-align:center; ">未获取到相关数据</div>
+						</empty>
+					</div>
+					<!--内容結束-->
+					<!--分页开始-->
+					<div class="float_r mt15">
+						<div class="dataTables_paginate paging_simple_numbers">
+						{$pageNav}
+						</div>
+					</div>
+					<!--分页结束-->
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="__PUBLIC__/Css/bootstrap/js/bootstrap.min.js"></script>
+	<script src="__PUBLIC__/plugins/iCheck/icheck.min.js"></script>
+	<script src="__PUBLIC__/plugins/layer/layer.js"></script>
+	<script type="text/javascript">
+	//列表行悬停效果
+	$("tbody tr").mouseover(function(){
+		$(this).css("background-color","#e5e5e5");
+	}).mouseout(function(){
+		$(this).css("background-color","#fff");
+	});		
+	</script>
+</body>
+</html>

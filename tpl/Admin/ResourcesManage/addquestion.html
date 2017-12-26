@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>新增试题</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+<link rel="stylesheet" href="__PUBLIC__/Css/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/ionicons-2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/comm.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/layer/skin/layer.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/iCheck/all.css">
+<link rel="stylesheet" href="__PUBLIC__/plugins/searchSelect/chosen.css">
+<link rel="stylesheet" href="__PUBLIC__/Css/validform.css">
+</head>
+
+<body>
+	<section class="content-header">
+		<h1 class="info_title">
+			试题管理 <small>/新增试题</small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="javascript:void(0)" onclick="JavaScript:history.back(-1)" class="text-grey"><i class="fa fa-mail-reply-all"></i>返回</a></li>
+		</ol>
+	</section>
+	<!--内容区域顶栏面包屑结束-->
+	<section class="content">
+		<div class="box box-primary">
+			<div class="box-body">
+				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+					<!--内容开始-->
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="box-header with-border">
+								<h3 class="box-title">新增试题</h3>
+							</div>
+							<form class="form-horizontal" action="__SELF__" method="POST" id="form">
+								<div class="box-body itemList">
+									<!--所属课程字段开始-->
+									<div class="form-group" id="address" style="display: none;">
+										<label for="inputEmail3" class="col-sm-2 control-label">所属课程：</label>
+										<div class="col-sm-10">
+											<select class="form-control select2" name="belongcourse" id="belongcourse">
+												<option value="-1">
+													<a>--请选择所属课程--</a>
+												</option>
+												<foreach name="course" item="v">
+												<option value="{$v.id}">{$v.course_name}</option>
+												</foreach>
+											</select>
+										</div>
+									</div>
+									<!--所属课程字段结束-->
+									<!--试题类型字段开始-->
+									<div class="form-group" id="supplier" style="display: none;">
+										<label for="inputEmail3" class="col-sm-2 control-label"><span class="color_red">*</span>试题类型：</label>
+										<div class="col-sm-10">
+											<select id="s" class="form-control select2 " style="width: 180px" name="classification">
+												<option value="1">单选题</option>
+												<option value="2">多选题</option>
+												<option value="3">判断题</option>
+												<option value="4">简答题</option>
+											</select>
+										</div>
+									</div>
+									<!--试题类型字段结束-->
+									<!--试题描述字段开始-->
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-2 control-label"><span class="color_red">*</span>试题描述：</label>
+										<div class="col-sm-10">
+											<textarea name="title" id="title" style="resize: none; width: 100%; height: 150px; font-size: 15px;"></textarea>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-2 control-label"><span class="color_red">*</span>试题解析：</label>
+										<div class="col-sm-10">
+											<textarea name="analysis" id="analysis" style="resize: none; width: 100%; height: 150px; font-size: 15px;"></textarea>
+										</div>
+									</div>
+									<!--课程大纲字段结束-->
+
+									<div class="itemList">
+										<!--单选题开始-->
+										<div id="DX2" class="itemCon">
+											<div class="optList">
+												<div class="form-group" style="display: none;">
+													<label for="inputEmail3" class="col-sm-2 control-label"><span class="optOrder">选项A</span></label>
+													<div class="col-sm-10">
+														<input style="width: 300px;" type="text" class="form-control mr30" name="optiona[]" placeholder="请输入选项文字"> <label class="mt5"> 
+														<input class="mr5" type="radio" name="dan[]" value="" /><span class="ml5">正确答案</span></label> <span class="ml20"> 
+															 <a href="javascript:void(0)" class="optUp"> <i class="fa fa-lg fa-arrow-circle-o-up mr10" ></i></a>
+															 <a href="javascript:void(0)" class="optDown"> <i class="fa fa-lg fa-arrow-circle-o-down mr10" ></i></a>
+															 <a href="javascript:void(0)" class="optDel"> <i class="fa fa-lg fa-minus-circle mr10" ></i></a>
+															 <a href="javascript:void(0)" class="optAdd"> <i class="fa fa-lg fa-plus-circle mr10" ></i></a>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- 单选题时内容结束-->
+
+										<!-- 多选题目时内容开始-->
+										<div id="DX3" class="itemCon" style="display: none;">
+											<div class="optList">
+												<div class="form-group" style="display: none;">
+													<label for="inputEmail3" class="col-sm-2 control-label"><span class="optOrder">选项A</span></label>
+													<div class="col-sm-10">
+														<input style="width: 300px;" type="text" class="form-control mr30" name="optiona[]" placeholder="请输入选项文字"> <label class="mt5">
+														<input class="mr5" type="checkbox" name="duo[]" value="" /><span class="ml5">正确答案</span></label> <span class="ml20">
+															<a href="javascript:void(0)" class="optUp"> <i class="fa fa-lg fa-arrow-circle-o-up mr10" ></i></a>
+															 <a href="javascript:void(0)" class="optDown"> <i class="fa fa-lg fa-arrow-circle-o-down mr10" ></i></a>
+															 <a href="javascript:void(0)" class="optDel"> <i class="fa fa-lg fa-minus-circle mr10" ></i></a>
+															 <a href="javascript:void(0)" class="optAdd"> <i class="fa fa-lg fa-plus-circle mr10" ></i></a>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- 多选题时内容结束-->
+
+										<!-- 判断题题目时内容开始-->
+										<div id="PD4" class="" style="display: none;">
+											<div class="form-group" id="supplier" style="display: none;">
+												<label for="" class="col-sm-2 control-label">答案A：</label>
+												<div class="col-sm-4">
+													<div style="text-align: left;" class=" control-label">对</div>
+												</div>
+											</div>
+											<div class="form-group" id="supplier" style="display: none;">
+												<label for="" class="col-sm-2 control-label">答案B：</label>
+												<div class="col-sm-4">
+													<div style="text-align: left;" class=" control-label">错</div>
+												</div>
+											</div>
+											<!--标准答案字段开始-->
+											<div class="form-group" id="supplier" style="display: none;">
+												<label for="" class="col-sm-2 control-label"><span class="color_red">*</span>标准答案：</label>
+
+												<div class="col-sm-4">
+													<input type="text" class="form-control mr30" id="" placeholder="标准答案如A" name="right_option[]">
+												</div>
+											</div>
+											<!--标准答案字段结束-->
+										</div>
+										<!-- 判断题题目时内容结束-->
+										<!-- 简答题题目时内容开始-->
+										<div id="WD5" class="" style="display: none;">
+
+											<div class="form-group" id="supplier" style="display: none;">
+												<label for="" class="col-sm-2 control-label"><span class="color_red">*</span>标准答案：</label>
+
+												<div class="col-sm-4">
+													<textarea class="form-control width_10" cols="100" rows="10" placeholder="在此处填写标准答案…………" name="right_option[]"></textarea>
+												</div>
+											</div>
+
+											<div class="form-group" id="supplier" style="display: none;">
+												<label for="" class="col-sm-2 control-label"><span class="color_red">*</span>得分关键字：</label>
+
+												<div class="col-sm-4">
+													<input style="width: 100%;" type="text" class="form-control mr30" id="" placeholder="如关键词：代理保险、大堂经理等" name="keywords">
+												</div>
+											</div>
+										</div>
+										<!-- 简答题题目时内容结束-->
+
+									</div>
+								</div>
+								<span id="msgdemo2" style="margin-left: 30px;"></span>
+								<div class="box-footer">
+									<div class="form-group">
+										<label class="col-sm-2 control-label"></label>
+										<div class="col-sm-10">
+											<button type="button" class="btn btn-info form-group_but" id="submit">保存</button>
+											<button type="reset" class="btn btn-default form-group_but">重置</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<!--内容結束-->
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- 新增题目选项 --单选-->
+	<div id="addOptHtmlA" style="display:none;">
+		<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label"><span class="optOrder"></span></label>
+			<div class="col-sm-10">
+				<input style="width: 300px;" type="text" class="form-control mr30" name="optiona[]" placeholder="请输入选项文字"> <label class="mt5">
+				<input class="mr5" type="radio" name="dan[]" value="" />
+				<span class="ml5">正确答案</span></label> <span class="ml20"> 
+					 <a href="javascript:void(0)" class="optUp"> <i class="fa fa-lg fa-arrow-circle-o-up mr10" ></i></a>
+					 <a href="javascript:void(0)" class="optDown"> <i class="fa fa-lg fa-arrow-circle-o-down mr10" ></i></a>
+					 <a href="javascript:void(0)" class="optDel"> <i class="fa fa-lg fa-minus-circle mr10" ></i></a>
+					 <a href="javascript:void(0)" class="optAdd"> <i class="fa fa-lg fa-plus-circle mr10" ></i></a>
+				</span>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 新增题目选项--多选 -->
+	<div id="addOptHtmlB" style="display: none;">
+		<div class="form-group">
+			<label for="inputEmail3" class="col-sm-2 control-label"><span class="optOrder"></span></label>
+			<div class="col-sm-10">
+				<input style="width: 300px;" type="text" class="form-control mr30" name="optiona[]" placeholder="请输入选项文字"> <label class="mt5">
+				<input class="mr5" type="checkbox" name="duo[]" value="" /><span class="ml5">正确答案</span></label>
+				<span class="ml20">
+					 <a href="javascript:void(0)" class="optUp"> <i class="fa fa-lg fa-arrow-circle-o-up mr10" ></i></a>
+					 <a href="javascript:void(0)" class="optDown"> <i class="fa fa-lg fa-arrow-circle-o-down mr10" ></i></a>
+					 <a href="javascript:void(0)" class="optDel"> <i class="fa fa-lg fa-minus-circle mr10" ></i></a>
+					 <a href="javascript:void(0)" class="optAdd"> <i class="fa fa-lg fa-plus-circle mr10" ></i></a>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<script src="__PUBLIC__/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="__PUBLIC__/plugins/searchSelect/chosen.jquery.js"></script>
+	<script src="__PUBLIC__/plugins/ckeditor/ckeditor.js"></script>
+	<script src="__PUBLIC__/Js/js/Validform_v5.3.2.js"></script>
+	<script src="__PUBLIC__/plugins/layer/layer.js"></script>
+	<script type="text/javascript">
+$(function(){
+    $('select[name=belongcourse]').chosen();
+    
+    $('#submit').click(function(){
+    	var tab = $('#s option:selected').val();
+    	var danLength = $("input:radio:checked").length;
+    	var duoLength = $("input:checkbox:checked").length;
+    	
+    	if(tab == 1){
+    		if(danLength == 0){
+    			layer.alert('请选择正确答案');
+    			return false;
+    		}
+    	}
+    	if(tab == 2){
+    		if(duoLength == 0){
+    			layer.alert('请选择正确答案');
+    			return false;
+    		}
+    	}
+    	console.log($('form').serialize());
+    	console.log($('input[name=optiona]').val());
+    	
+    	$.ajax({
+    		type:"post",
+    		url:$('form').attr('action'),
+    		data:$('form').serialize(),
+    		success:function(msg){
+    			if(msg.status==1){
+    				layer.msg('添加成功');
+    				setTimeout(function(){
+                        window.location.href=msg.url;
+                    },1500);
+                }else{
+                    layer.msg('添加失败');
+                    return false;
+                }
+    		}
+    	});
+    })
+    //下拉框控制题型           
+    var map = {
+        "1": "DX2",
+        "2": "DX3",
+        "3": "PD4",
+        "4": "WD5"
+    };
+    $("#s").bind("change", function() {
+        var divId = map[this.value];
+        $("#" + divId).show().siblings().hide();
+		$('#DX2,#DX3').find('.form-group:gt(0)').remove();
+    });
+    
+    
+    /*
+	*--------------------------------------------------------------------------
+	*								选项操作部分
+	*--------------------------------------------------------------------------
+	*/
+    //添加选项
+    //单选
+	$("#DX2").on("click",".optAdd",function(){
+    	var htmlCon = $("#addOptHtmlA").html();
+    	$(this).closest(".itemCon").find(".optList").append(htmlCon);
+    	optOrderSet();
+    });
+    
+    //多选
+	$("#DX3").on("click",".optAdd",function(){
+    	var htmlCon = $("#addOptHtmlB").html();
+    	$(this).closest(".itemCon").find(".optList").append(htmlCon);
+    	optOrderSet();
+    });
+
+	//删除选项
+	$(".optList").on("click",".optDel",function(){
+		var length = $(".optList").length;
+		if(length == 1){
+			layer.alert("至少保留一个选项");
+			return false;
+		}
+    	$(this).closest(".form-group").remove();
+    	optOrderSet();
+    });
+	
+	//上移选项
+	$(".optList").on("click",".optUp",function(){
+		var index = $(this).closest(".optList .form-group").index();
+		if(index == 0){
+			return false;
+		}
+		var htmlCon = $(this).closest(".form-group");
+		$(this).closest(".optList").find(".form-group").eq(index-1).before(htmlCon);
+		optOrderSet();
+    });
+	
+	//下移选项
+	$(".optList").on("click",".optDown",function(){
+		var index = $(this).closest(".optList .form-group").index();
+		var length = $(this).closest(".optList").find(".form-group").length;
+		if(index == (length - 1)){
+			return false;
+		}
+		var htmlCon = $(this).closest(".form-group");
+		$(this).closest(".optList").find(".form-group").eq(index+1).after(htmlCon);
+		optOrderSet();
+    });
+	
+	//计算选择选项序号
+	function optOrderSet(){
+		var optLetter = new Array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",'ⅰ','ⅱ','ⅲ','ⅳ');
+		$("#DX2 .optList .optOrder").each(function(index,element){
+			$(element).text("选项"+optLetter[index]);
+			$(element).closest(".form-group").find("input[name='dan[]']").val(optLetter[index]);
+			$(element).closest(".form-group").find("input[name='duo[]']").val(optLetter[index]);
+			if(index!=0){
+				$(element).closest(".form-group").find("input:eq(0)").attr('name','option'+optLetter[index].toLowerCase());
+			}else{
+				$(element).closest(".form-group").find("input:eq(0)").attr('name','option'+optLetter[index].toLowerCase()+'[]');
+			}
+		});
+		$("#DX3 .optList .optOrder").each(function(index,element){
+			$(element).text("选项"+optLetter[index]);
+			$(element).closest(".form-group").find("input[name='dan[]']").val(optLetter[index]);
+			$(element).closest(".form-group").find("input[name='duo[]']").val(optLetter[index]);
+			
+			if(index!=0){
+				$(element).closest(".form-group").find("input:eq(0)").attr('name','option'+optLetter[index].toLowerCase());
+			}else{
+				$(element).closest(".form-group").find("input:eq(0)").attr('name','option'+optLetter[index].toLowerCase()+'[]');
+			}
+		});
+	}
+})   
+</script>
+</body>
+
+</html>

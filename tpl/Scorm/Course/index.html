@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="textml; charset=utf-8" />
+<meta name="author" content="RYD"/>
+<title>Scorm课列表</title>
+<script type="text/javascript" src="__PUBLIC__/Scorm/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Scorm/plugins/layer_v3.0.3/layer.js"></script>
+
+<link rel="stylesheet" href="__PUBLIC__/Dist/css/AdminLTE.min.css">
+<!-- bootstrap奥森图标  -->
+<link rel="stylesheet" href="__PUBLIC__/Scorm/plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC__/Scorm/plugins/bootstrap-3.3.7/css/bootstrap-theme.min.css">
+<script src="__PUBLIC__/Scorm/plugins/bootstrap-3.3.7/js/bootstrap.min.js" ></script>
+<!-- 复制插件 -->
+<script type="text/javascript" src="__PUBLIC__/Scorm/plugins/clipboard/clipboard.js"></script>
+<!-- awesome奥森图标  -->
+<link rel="stylesheet" href="__PUBLIC__/Scorm/plugins/fontawesome-v4.2/css/font-awesome.min.css">
+
+<style type="text/css">
+	@CHARSET "UTF-8";
+	*{margin:0; padding:0; font-family:"Microsoft YaHei","宋体";}
+	a{text-decoration: none; }
+	input,button,select,textarea{outline:none; }
+	ul,ol{list-style: none; }
+	img{border: 0; }
+	.txtc{text-align:center; }
+	.fl{display:block; float:left; }
+	.fr{display:block; float:right; }
+	.pdl10{padding-left:10px; }
+	.pdl20{padding-left:20px; }
+	
+	.main{width:96%; margin:10px auto; }
+	h3{color:#555; font-weight:700; }
+	.scoList li{float:left; padding:10px 0; width:100%; border-bottom:1px dashed #ccc; }
+	.scoList li span{display:block; float:left; width:27%; }
+	.scoList li span.time_con{width:18%; }
+	.scoList li a{color:#1f82c5; }
+	.scoList li a:hover{text-decoration:underline; }
+	.scoList li.title{background:#ddd; }
+	.scoList li.title span{background:#ddd; text-align:center; }
+	.scoList li.con:hover{background:#DfDfDf; }
+	.addCourseBtn, .addCourseBtn *{margin-left:15px; font-size:16px; color:#1F82C5; }
+	
+	#addBox{padding:20px; }
+	.tip{font-size:13px; color:red; margin-bottom:30px; line-height:35px; }
+	.submitBtn{margin-top:15px; }
+	h3 a{font-size:14px; color:#1f82c5; }
+	.copyBtn{padding:0 6px; }
+	.dataTables_paginate a{
+		font-size:15px;
+		margin-left:-1px;
+		padding:8px 15px;
+		background:#eee;
+		border:1px solid #ccc;
+	}
+	.dataTables_paginate{
+		margin:30px 0;
+	}
+	.dataTables_paginate span{
+		font-size:15px;
+		margin-left:-1px;
+		padding:8px 15px;
+		background:#337AB7;
+		color:#fff;
+		border:1px solid #337AB7;
+	}
+	.dataTables_paginate a:hover{
+		background:#6CB8E6;
+		border:1px solid #6CB8E6;
+		color:#fff;
+	}
+	
+</style>
+</head>
+<body>
+<div class="main">
+		<div>
+			<form class="" style="margin:15px 0;">
+				<div class="input-group">
+					<input type="hidden" name="type" value="{$type}"/>
+					<span style="font-size:20px; color:#777; font-weight:700; ">Scorm课件列表</span>
+					<input type="text" name="title" value="{$title}" class="form-control pull-right" placeholder="请输入关键字" style="width: 200px;">
+					<div class="input-group-btn">
+						<button type="submit" class="btn btn-default">
+							<i class="fa fa-search"></i>
+						</button>
+					</div>
+				</div>
+				<div class="input-group ">
+					<ul class="nav nav-tabs">
+		                <li <if condition="$type eq 1"> class="active" </if> >
+		                    <a href="__CONTROLLER__/index?type=1">全部</a>
+		                </li>
+		                <li <if condition="$type eq 2"> class="active" </if>>
+		                    <a href="__CONTROLLER__/index?type=2">对我共享</a>
+		                </li>
+		                <li <if condition="$type eq 3"> class="active" </if>>
+		                    <a href="__CONTROLLER__/index?type=3">典阅课件</a>
+		                </li>
+		            </ul>
+				</div>
+			</form>
+		</div>
+		<ul class="scoList">
+		<li class="title">
+			<span>课件名称</span>
+			<span>课件描述</span>
+			<span class="time_con">添加时间</span>
+			<span>操作<if condition="$type eq 1"><a href="__CONTROLLER__/addPage" class="addCourseBtn"><i class="fa fa-plus"></i>添加课件</a></if></span>
+		</li>
+		<foreach name="list" item="data">
+		<if condition="$type eq 1">
+		<li class="con">
+			<span class="pdl20">{$data.name}</span>
+			<span>{$data.descs}&nbsp;</span>
+			<span class="txtc time_con">{$data.addtime}&nbsp;</span>
+			<span class="txtc"><a href="__CONTROLLER__/course?scoid={$data.id}&comid=1" target="_blank">预览</a> 
+			| <a href="__CONTROLLER__/editPage?scoid={$data.id}&comid=1">编辑</a> 
+			| <a class="delScoBtn" href="javascript:void(0);" rel="{$data.id}">删除</a> 
+			| <a class="shareScoBtn" href="javascript:void(0);" onclick="share_range({$data.id});" rel="{$data.id}">共享</a> 
+			| <button data-clipboard-text="http://{$host}__CONTROLLER__/course?scoid={$data.id}&comid=1" class="copyBtn">复制</button></span>
+		</li>
+		<elseif condition="$type eq 2"/>
+		<li class="con">
+			<span class="pdl20">{$data.name}</span>
+			<span>{$data.descs}&nbsp;</span>
+			<span class="txtc time_con">{$data.addtime}&nbsp;</span>
+			<span class="txtc"><a href="__CONTROLLER__/course?scoid={$data.id}&comid=1" target="_blank">预览</a> 
+			| <button data-clipboard-text="http://{$host}__CONTROLLER__/course?scoid={$data.id}&comid=1" class="copyBtn">复制</button></span>
+		</li>
+		<else/>
+		<li class="con">
+			<span class="pdl20">{$data.name}</span>
+			<span>{$data.descs}&nbsp;</span>
+			<span class="txtc time_con">{$data.addtime}&nbsp;</span>
+		</li>
+		<foreach name="data.chap_list" item="subList" key="subKey">
+		<li class="con">
+			<span class="pdl20" style="width:54%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;课时{$subKey+1} {$subList.name}</span>
+			<span class="txtc time_con">-&nbsp;</span>
+			<span class="txtc"><a href="{$subList.path}" target="_blank">预览</a> 
+			| <button data-clipboard-text="{$subList.path}" class="copyBtn">复制</button></span>
+		</li>
+		</foreach>
+		</if>
+		</foreach>
+	</ul>
+	
+	<div class="fr dataTables_paginate">{$pageNav}</div>
+</div>
+
+<!-- 添加课件 -->
+<div id="addBox" style="display:none; ">
+	<div class="tip">
+		注意：<br/>
+		仅支持zip课件压缩包上传，rar格式请先解压转为zip格式压缩；<br/>
+		因课件包资源比较大，请设置服务器支持上传至少150M的数据；<br/>
+		文件上传比较久，请耐心等待，上传完毕前请勿关闭页面；<br/>
+	</div>
+	<form role="form" action="{:U('Home/course/addCourse')}" method="post" enctype="multipart/form-data" id="form">
+		<input type="file" name="zipFile" id="zipFile"/>
+		<input type="submit" class="btn btn-success submitBtn" value="提交"/>
+	</form>
+</div>
+
+<script type="text/javascript">
+	var clipboard = new Clipboard('.copyBtn');
+	clipboard.on('success', function() {
+		layer.msg("复制成功", {time:800});
+    });
+	
+	$(".addCourseBtn").click(function(){
+		layer.open({
+            title: '添加Scorm课件',
+            type: 1,
+            offset: '100px',
+            skin: 'layui-layer-molv', //样式类名
+            closeBtn:1, //显示关闭按钮
+            area: ['450px', '340px'],
+            shadeClose: true, //开启遮罩关闭
+            content: $("#addBox")
+        });
+		return false;
+	});
+	
+	$("#form").submit(function(){
+		var loading = layer.load(0);
+		var is_file = $("#form input[type='file']").val();
+	    if (is_file == '') {
+	    	layer.close(loading);
+	        layer.alert('请选择zip课件压缩包文件');
+	        return false;
+	    }
+	    var pos = is_file.lastIndexOf(".");
+	    var format = is_file.substring(pos + 1).toLowerCase();
+	    if (format != 'zip') {
+	    	layer.close(loading);
+	        layer.alert('上传文件格式不正确，必须为zip');
+	        return false;
+	    }
+	    
+	    var formData = new FormData($('#form')[0]);
+	 	$.ajax({
+			type: "post",
+			url: "__CONTROLLER__/addCourse",
+			data: formData,
+			dataType: "json",
+			contentType: false,
+			processData: false,
+			success: function(data){
+				layer.close(loading);
+				if(data.code == 1000){
+					layer.msg("添加成功", {time:800}, function(){
+						location.href = "__CONTROLLER__/index";
+					});
+				}else{
+					layer.alert(data.message);
+				}
+			}
+		});
+	 	return false;
+	});
+	
+	//删除课件
+	$(".delScoBtn").click(function(){
+		var _this = $(this);
+		var scoid = $(this).attr("rel");
+		layer.confirm('确定删除此课件吗？',{
+			btn: ['确定', '取消'],
+			skin: 'layui-layer-lan',
+			offset: '100px'
+		}, function() {
+			$.ajax({
+				type: "post",
+				url: "__CONTROLLER__/delSco",
+				data: "scoid="+scoid,
+				dataType: "json",
+				success: function(data){
+					layer.closeAll();
+					if(data.code == 1000){
+						layer.msg("操作成功", {time:800}, function(){
+							_this.closest("li").remove();
+						});
+					}else{
+						layer.alert(data.message);
+					}
+				}
+			});
+			
+		});
+	});
+	
+	//共享课件
+	function share_range(source_id) {
+		var getRangeUrl = "__APP__/admin/sys/shareRange?type=6&source_id="+source_id;
+		layer.open({
+			title: '共享范围',
+			btn: ['确定','取消'],
+			yes: function (index, layero){
+				var body = layer.getChildFrame('body',index);
+				var range_id = new Array();
+				body.find("input:checked").each(function(i){
+					range_id += $(this).val();
+					range_id += ",";
+				});
+				$.ajax({
+					type : "POST",
+					url : "__CONTROLLER__/saveShare",
+					data :"source_id="+source_id+"&tissueIds="+range_id,
+					dataType : "json",
+					success : function(data){
+						if(data.code == 1000){
+							layer.alert('修改成功,1秒后自动关闭', {
+								icon : 1
+							});
+							setTimeout(
+									"location.reload();",
+									1000);//刷新当前页面.
+						}else{
+							layer.msg(data.message);
+						}
+					}
+				});
+			},
+			area: ['600px', '400px'],
+			type: 2,
+			skin: 'layui-layer-lan', //样式类名
+			closeBtn: 1, //显示关闭按钮
+			anim: 2,
+			shadeClose: true, //开启遮罩关闭
+			content: getRangeUrl
+		});
+	}
+	
+</script>
+</body>
+</html>
